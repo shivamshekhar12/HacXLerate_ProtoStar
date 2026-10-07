@@ -1,4 +1,4 @@
-# Smart Campus AI — Round 1
+# HacXLerate — Smart Campus AI (Round 1)
 
 Complete role frontend V1: Vite + HTML/CSS + vanilla JavaScript, based on the supplied Stitch visual direction. This is the core V1 frontend review checkpoint, not the completed hackathon submission.
 
@@ -58,3 +58,18 @@ npm run supabase:check
 ```
 
 See [connection setup and validation](docs/SUPABASE_INTEGRATION.md).
+
+## GitHub development
+
+Repository: https://github.com/Rudra-Sharma-432/HacXLerate, branch `codex`.
+
+For future changes from this checkout:
+
+```sh
+git status
+git add .
+git commit -m "Describe your change"
+git push origin codex
+```
+
+Pull teammates' changes with `git pull --rebase origin codex` after committing your own work. Keep `.env.local` private; each developer configures Supabase using `.env.example`. Dependencies, build output and CLI cache files are intentionally ignored.
