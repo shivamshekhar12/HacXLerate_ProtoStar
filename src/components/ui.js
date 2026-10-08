@@ -1,5 +1,5 @@
 export const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-export const icon = (name) => `<span class="material-symbols-outlined" aria-hidden="true">${name}</span>`;
+export const icon = (name) => `<span class="material-symbols-outlined" aria-hidden="true">${escapeHtml(name)}</span>`;
 let timer;
 export function announce(message) {
   const status = document.querySelector('#status');

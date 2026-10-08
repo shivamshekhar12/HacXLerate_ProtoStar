@@ -112,6 +112,7 @@ async function render() {
   if(name==='management'||authState.account?.role==='management'){
     if(!authState.account){location.hash='#/management/login';return;}
     const permission=await client.rpc('can_manage_accounts');
+    if(rendering!==renderVersion)return;
     if(permission.error||!permission.data){location.hash='#/'+roleHome(authState.account.role);return;}
     standalone(renderManagement());document.title='Account management · Porto-Star';
     await bindManagement(client,()=>exitAccount().catch(()=>alert('Could not sign out. Please retry.')));return;
@@ -124,7 +125,7 @@ async function render() {
   if(loadedWorkspace!==(authState.account?.user.id??'demo'))document.querySelector('#main').innerHTML='<section class="panel" aria-busy="true"><h1>Loading your workspace…</h1><p>Fetching records from Supabase.</p></section>';
   try{
     if(!authState.account||authState.account.role==='student')await hydrateWorkspace();
-  }catch(error){document.querySelector('#main').innerHTML=`<section class="panel"><h1>Workspace unavailable</h1><p>${escapeHtml(error.message)}</p><button class="button" id="retry-workspace">Retry</button></section>`;document.querySelector('#retry-workspace').addEventListener('click',render);return;}
+  }catch(error){if(rendering!==renderVersion)return;document.querySelector('#main').innerHTML=`<section class="panel"><h1>Workspace unavailable</h1><p>${escapeHtml(error.message)}</p><button class="button" id="retry-workspace">Retry</button></section>`;document.querySelector('#retry-workspace').addEventListener('click',render);return;}
   if(rendering!==renderVersion)return;
   if(authState.account&&role!=='student'){document.querySelector('#main').innerHTML='<section class="panel"><h1>Workspace registered</h1><p>Live faculty/recruiter services are awaiting cohort and consent configuration. Real student records are not shown here.</p></section>';return;}
   const page = pages[name] ?? (name.startsWith('faculty/student/') ? {render:s=>renderStudentDetail(s,name.split('/')[2]),title:'Student Detail'} : name.startsWith('recruiter/candidate/') ? {render:s=>renderCandidate(s,name.split('/')[2]),title:'Candidate Profile'} : null);

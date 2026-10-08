@@ -24,7 +24,7 @@ export function bindLogin(client, onAccount) {
     const selectedRole=form.elements.role.value;
     authState.busy=true;form.setAttribute('aria-busy','true');
     form.querySelectorAll('input,button').forEach(x=>x.disabled=true);document.querySelector('#demo-preview').disabled=true;
-    document.querySelector('#login-button-label').textContent='Signing in…';document.querySelector('#login-status').textContent='Signing in. Please wait.';
+    document.querySelector('#login-button-label').textContent=signup?'Creating account…':'Signing in…';document.querySelector('#login-status').textContent=signup?'Creating account. Please wait.':'Signing in. Please wait.';
     try {
       const result=signup?await signUpAccount(client,{email:email.value,password:password.value,name:form.elements.displayName.value,role:selectedRole}):await signInAccount(client,email.value,password.value,selectedRole);
       password.value='';
@@ -34,7 +34,7 @@ export function bindLogin(client, onAccount) {
     } catch {password.value='';message.textContent='We couldn’t reach the sign-in service. Please try again.';message.hidden=false;}
     finally {
       authState.busy=false;
-      if(form.isConnected){form.removeAttribute('aria-busy');form.querySelectorAll('input,button').forEach(x=>x.disabled=false);if(!client)form.querySelector('[type=submit]').disabled=true;document.querySelector('#demo-preview').disabled=false;document.querySelector('#login-button-label').textContent=label();document.querySelector('#login-status').textContent=message.hidden?'Sign-in complete.':'Sign-in unsuccessful.';}
+      if(form.isConnected){form.removeAttribute('aria-busy');form.querySelectorAll('input,button').forEach(x=>x.disabled=false);if(!client)form.querySelector('[type=submit]').disabled=true;document.querySelector('#demo-preview').disabled=false;document.querySelector('#login-button-label').textContent=label();document.querySelector('#login-status').textContent=message.hidden?'Sign-in complete.':message.classList.contains('login-success')?'Confirmation email requested. Check your inbox.':'Sign-in unsuccessful.';}
     }
   });
 }

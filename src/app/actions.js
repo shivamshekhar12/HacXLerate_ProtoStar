@@ -89,7 +89,7 @@ export function bindActions(render) {
     if (button.hasAttribute('data-project')) { projectDialog(render, button.dataset.project); return; }
     if (button.dataset.domain) {
       const d = state.student.domains.find(d => d.id === button.dataset.domain);
-      showDialog(`${escapeHtml(d.name)} evidence`, `<span class="badge ${d.value === null ? 'neutral' : 'positive'}">${escapeHtml(d.state)} · ${state.mode==='demo'?'Synthetic':'Your records'}</span><h3>${escapeHtml(d.source)}</h3><p>${escapeHtml(d.evidence)}</p><div class="reason"><strong>Provenance</strong><p>${state.mode==='demo'?'Synthetic preview from Supabase.':'Source measurements have not been supplied by campus systems. Portfolio evidence is self-reported.'}</p></div>`);
+      showDialog(`${d.name} evidence`, `<span class="badge ${d.value === null ? 'neutral' : 'positive'}">${escapeHtml(d.state)} · ${state.mode==='demo'?'Synthetic':'Your records'}</span><h3>${escapeHtml(d.source)}</h3><p>${escapeHtml(d.evidence)}</p><div class="reason"><strong>Provenance</strong><p>${state.mode==='demo'?'Synthetic preview from Supabase.':'Source measurements have not been supplied by campus systems. Portfolio evidence is self-reported.'}</p></div>`);
       return;
     }
     switch (button.dataset.action) {

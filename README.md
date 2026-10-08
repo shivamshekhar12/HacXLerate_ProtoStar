@@ -123,6 +123,8 @@ output/pdf/           Reviewed report and presentation PDFs
 
 ## Detailed presentation material
 
+- [Latest code, data and security audit](docs/AUDIT_2026_10_08.md): fixes, 49 passing tests, deployment evidence and remaining limits.
+
 - [Project summary](docs/presentation/PROJECT_SUMMARY.md): problems, motivation, scope, stack and reasons.
 - [Solution description](docs/presentation/SOLUTION_DESCRIPTION.md): architecture, workflows, methods and example.
 - [Other information](docs/presentation/OTHER_INFORMATION.md): remaining problems, proposed solutions and rollout.

@@ -1,15 +1,15 @@
 // Numerical results are deterministic; AI never supplies these values.
 const finite=(value,min,max)=>typeof value==='number'&&Number.isFinite(value)&&value>=min&&value<=max;
 export function analyzeStudent(record,config){
- const factors=[['cgpa','CGPA',10],['attendance','Attendance',100],['lmsMarks','LMS assignment marks',100],['coding','Coding assessment',100]].map(([key,label,max])=>({key,label,value:finite(record[key],0,max)?record[key]:null,max,weight:config?.weights?.[key]??0}));
+ const factors=[['cgpa','CGPA',10],['attendance','Attendance',100],['lmsMarks','LMS assignment marks',100],['coding','Coding assessment',100]].map(([key,label,max])=>({key,label,value:finite(record[key],0,max)?record[key]:null,max,weight:config?.weights?.[key]??null}));
  const measured=factors.filter(f=>f.value!==null),complete=measured.length===factors.length;
- const approved=Boolean(config?.approved),validWeights=factors.every(f=>Number.isFinite(f.weight)&&f.weight>=0)&&factors.reduce((sum,f)=>sum+f.weight,0)===100;
+ const approved=config?.approved===true,validWeights=factors.every(f=>Number.isFinite(f.weight)&&f.weight>=0)&&factors.reduce((sum,f)=>sum+f.weight,0)===100;
  const score=approved&&validWeights&&complete?Math.round(factors.reduce((sum,f)=>sum+f.value/f.max*f.weight,0)*10)/10:null;
  const reasons=approved?factors.filter(f=>f.value!==null&&Number.isFinite(config.thresholds?.[f.key])&&f.value<config.thresholds[f.key]).map(f=>({key:f.key,text:`${f.label} ${f.value}/${f.max} is below the demo review threshold ${config.thresholds[f.key]}/${f.max}.`,category:f.key==='coding'?'placement':'academic'})):[];
- const segment=!approved?'Rules awaiting review':record.cgpa>=config.strongAcademic&&reasons.some(r=>r.category==='placement')?'Strong academics · career practice needed':reasons.some(r=>r.category==='academic')?'Academic support suggested':reasons.some(r=>r.category==='placement')?'Career practice suggested':complete?'No current demo flags':'Incomplete evidence';
+ const segment=!approved?'Rules awaiting review':record.cgpa>=config.strongAcademic&&!reasons.some(r=>r.category==='academic')&&reasons.some(r=>r.category==='placement')?'Strong academics · career practice needed':reasons.some(r=>r.category==='academic')?'Academic support suggested':reasons.some(r=>r.category==='placement')?'Career practice suggested':complete?'No current demo flags':'Incomplete evidence';
  const assessed=approved?measured.filter(f=>Number.isFinite(config.thresholds?.[f.key])).length:0;
  const reviewIndex=assessed?Math.round(reasons.length/assessed*100):null;
- return {score,reviewIndex,assessed,factors: factors.map(f=>({...f,contribution:f.value===null?null:f.value/f.max*f.weight})),complete,available:measured.length,risk:!approved?'Unconfigured':reasons.length?'Review suggested':complete?'No current flags':'Insufficient data',reasons,segment,version:config?.version??null,illustrative:true};
+ return {score,reviewIndex,assessed,factors: factors.map(f=>({...f,contribution:!approved||!validWeights||f.value===null?null:f.value/f.max*f.weight})),complete,available:measured.length,risk:!approved?'Unconfigured':reasons.length?'Review suggested':complete?'No current flags':'Insufficient data',reasons,segment,version:config?.version??null,illustrative:true};
 }
 export function studentRecord(state){
  const domain=id=>state.student.domains.find(d=>d.id===id)?.value??null;
