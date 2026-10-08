@@ -17,7 +17,7 @@ Google's public Safe Browsing report classified `https://protostar-campus.vercel
 
 The earlier Google Safe Browsing possible-false-positive form returned **Submission was successful**. Receipt: [Safe Browsing submission](review/google-safe-browsing-submitted.png).
 
-After verification and deployment, the Search Console owner review was submitted with the observed findings, identity clarification, source link and validation results. Google displayed **Request submitted successfully**. Receipt: [Search Console submission](review/search-console-review-submitted.png).
+After verification and deployment, the Search Console owner review was submitted with the observed findings, identity clarification, source link and validation results. Google displayed **Request submitted successfully** in a temporary notification. The saved [Search Console report screenshot](review/search-console-review-submitted.png) captures the issue still listed after submission; the temporary success notification had disappeared before that file was saved.
 
 The submission explicitly states that the original detection trigger is unknown and requests re-evaluation; it does not claim every backend component is secure. The Security Issues report still showed the issue immediately after submission. No review approval, removal of the warning, case ID or completion date was provided.
 
