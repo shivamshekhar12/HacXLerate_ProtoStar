@@ -44,3 +44,14 @@ test('authentication errors use safe copy and preserve rate-limit meaning',()=>{
   assert.ok(authErrorMessage({code:'email_not_confirmed'}).includes('Confirm'));
   assert.ok(!authErrorMessage({message:'database secrets here'}).includes('secrets'));
 });
+
+test('production signup requests the exact HTTPS confirmation destination without router hash',async()=>{
+ const previous=globalThis.window;let request;
+ globalThis.window={location:{origin:'https://protostar-campus.vercel.app',pathname:'/',hash:'#/signup'}};
+ try{
+  const client={auth:{signUp:async input=>{request=input;return {data:{session:null,user:{id:'new-user'}},error:null};}}};
+  assert.deepEqual(await signUpAccount(client,{email:'student@example.test',password:'test-password',name:'Student',role:'student'}),{confirmation:true});
+  assert.equal(request.options.emailRedirectTo,'https://protostar-campus.vercel.app/');
+  assert.doesNotMatch(request.options.emailRedirectTo,/localhost|#\/signup/);
+ }finally{if(previous===undefined)delete globalThis.window;else globalThis.window=previous;}
+});

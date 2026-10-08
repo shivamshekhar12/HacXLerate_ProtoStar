@@ -16,13 +16,16 @@ The existing PROTO-STAR Supabase project remains the backend. Vercel contains on
 
 ## Production Auth configuration
 
-The deployment is public and the synthetic preview works without an account. Existing password login uses the same Supabase project. Before relying on hosted signup-confirmation links, configure the following in PROTO-STAR's Authentication > URL Configuration:
+The deployment is public and the synthetic preview works without an account. Existing password login uses the same Supabase project. On 8 October 2026, the hosted Auth configuration was corrected in PROTO-STAR's Authentication > URL Configuration:
 
-- Site URL: `https://protostar-campus.vercel.app`
-- Add redirect URL: `https://protostar-campus.vercel.app/`
-- Preserve the local development redirect if the team still uses it.
+- Site URL: `https://protostar-campus.vercel.app` (previously `http://localhost:3000`).
+- Allowed redirect URL: `https://protostar-campus.vercel.app/` (the previous allow list was empty).
 
-The frontend requests its current origin for email confirmation. Supabase must allow that origin; otherwise it can fall back to the configured Site URL. The connector available in this session does not expose Auth URL configuration, so these settings have not been changed or verified. Production SMTP/email delivery also remains an account configuration requirement. Do not publish broad wildcard redirects unnecessarily.
+Both values persisted after dashboard reload. The frontend already requests this exact production root from the deployed origin; no runtime-code change or Vercel redeployment was required. A production signup regression test asserts the requested destination excludes localhost and the SPA routing hash. All 50 tests passed.
+
+A deliberately invalid confirmation token produced HTTP 303 with a Location on the production domain and the expected `otp_expired` error. This verifies the live redirect destination without creating/changing an account; it is not a successful real-user email-confirmation test. Previously issued emails can contain their original redirect target: request a fresh confirmation email if an old link still points to localhost. Production SMTP/email delivery remains a separate configuration concern.
+
+Saved settings evidence: `docs/review/auth-production-redirect.png`. No wildcard redirect, account permission, password policy or email-confirmation requirement was added or weakened.
 
 ## Verification and monitoring
 
