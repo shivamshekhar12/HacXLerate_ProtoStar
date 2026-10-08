@@ -1,216 +1,154 @@
 # Porto-Star
 
-**Explainable student success and career-readiness intelligence for campuses.**
+**Explainable academic and career intelligence for students, faculty, and recruiters.**
 
-Porto-Star turns scattered student evidence into clear academic and career insight. Students see where they stand, faculty see who may need support and why, and recruiters see professional evidence through a separate, limited view.
+Porto-Star is a Round-1 prototype for the Smart Campus Analytics hackathon problem. It brings academic, attendance, LMS, engagement, placement, skills, and feedback evidence into a common interface, calculates understandable indicators, and helps users identify improvement areas.
 
-> Built for **HacXLerate 2026, Round 1** (KPMG in India: *Smart Campus Analytics: Predict, Optimize & Improve Student Success*).
-> All data in this demo is **synthetic**. Scores are illustrative, not validated predictions.
+The product name is **Porto-Star**; the deployment slug uses **protostar**. Existing package and repository identifiers are retained for compatibility.
 
----
+## Try it
 
-## 1. Project Summary
+**Live application: https://protostar-campus.vercel.app**
 
-### The problem
-Colleges hold student data in separate systems: marks, attendance, LMS activity, placement tests, skills, engagement and feedback. Each source answers a different question, and no one sees the whole picture.
+Use **Explore demo preview** on the login page. Aaman Sharma is the default synthetic student. The workspace selector opens Faculty and Recruiter previews. The dataset contains 500 synthetic students, not 500 registered users. Candidate discovery uses a separate professional projection.
 
-- A student may have strong grades but weak career practice, and a single measure hides that.
-- Dashboards often show many numbers without saying what caused a flag or what to do next.
-- Faculty need to tell academic concerns from career-practice concerns.
-- Recruiters need professional evidence without private support information.
+See [deployment notes](docs/DEPLOYMENT.md) for the published address and verification.
 
-### Why we chose it
-- It connects data to a practical decision: **who needs support, why, and what kind**.
-- Three user groups (students, faculty, recruiters) have clear needs and different access boundaries.
-- It makes responsible design concrete: visible formulas, missing-data handling, consent, and human judgment.
-- It can be demonstrated honestly with synthetic data.
+## Problem and solution
 
-### Problems the prototype addresses
-| # | Problem | How the prototype responds |
-|---|---|---|
-| 1 | Fragmented evidence | Source-aware student and faculty views bring seven data categories into one interface |
-| 2 | Unexplained scores | Score cards show indicator contributions, hover explanations and a calculation dialog |
-| 3 | Unclear priorities | A review index comes with reasons and specific areas to discuss or practice |
-| 4 | Limited cohort visibility | Faculty can filter and inspect 500 students, review groups and segments |
-| 5 | Hard-to-read reports | Downloadable reports with plain-English interpretation, bars, method notes and limitations |
-| 6 | Privacy conflicts | Recruiter discovery uses a separate professional projection |
-| 7 | Confusing onboarding | A new student starts empty; the public Aaman preview is a separate demo path |
+Separate campus systems make it difficult to connect grades, participation, learning progress, and career preparation. Numbers alone rarely explain what a student should improve. Faculty need cohort patterns and understandable review reasons; recruiters need professional evidence without private support records.
 
-### Tech stack and why
-| Tool | Why we used it |
-|---|---|
-| **Vite + HTML + CSS + vanilla JavaScript** | Small modular runtime, fast iteration, logic that is easy to inspect, no extra framework |
-| **Supabase PostgreSQL** | Structured persistence and migrations |
-| **Supabase Auth** | Email/password identities |
-| **Row Level Security (RLS)** | Database-enforced ownership, instead of trusting a selected UI role |
-| **Supabase Edge Functions + Vault** | Keep the Gemini API key and provider calls server-side |
-| **Gemini** | Short English explanations of already-computed evidence only; deterministic fallback if unavailable |
-| **jsPDF** | Local downloadable vector PDF reports, loaded on demand |
-| **Vercel** | Builds and hosts the frontend over HTTPS |
-| **Node test runner** | Tests for calculation and service behavior |
-| **GitHub** | History and collaboration |
-| **Codex + Stitch designs** | Implementation help and interface guidance, with human review after each module |
+Porto-Star combines source-aware dashboards, deterministic calculations, readable explanations, and role-specific views. Gemini rewrites existing evidence in English; it does not calculate scores or predict placements. Missing records remain missing. Protected accounts are separate from the public synthetic preview.
 
----
+## Current implementation
 
-## 2. Solution Description
+| Area | Working now | Remaining work |
+| --- | --- | --- |
+| Accounts | Supabase login/signup, canonical role checks, empty new student workspace | Production email setup, recovery, complete staff provisioning |
+| Student | Own profile/portfolio/goal persistence, overview, subjects, skills/roles, growth, linked effort simulator | Verified evidence uploads, student doubts, profile photos, institutional simulator validation |
+| Faculty | 500-record synthetic cohort, review queue/reasons, subject filters, local support workflow, class PDF | Authorized live cohort queries and persistent support workflow |
+| Recruiter | Synthetic discovery, education/skill filters, roles, comparison, local shortlists, unsent drafts | Live consent projections and mediated contact requests |
+| Analytics | Explainable demo score, combined review index, segmentation, missing-data rules | Institutional policy, source ingestion and outcome validation |
+| AI/reports | Protected narration function, cached demo wording, fallback, student/class PDF generation | Actual signed-in narration verification and distributed quota |
+| Management | Restricted directory, editable demo policy, JSON template | Validated imports; upload remains disabled |
 
-### How it works
+Faculty/recruiter previews do not establish completed private staff backends. Demo edits, support actions, shortlists, and drafts may use browser storage. No introductions are sent externally.
+
+## Explainable analytics
+
+The **illustrative demo rubric** uses equal weights:
+
 ```text
-Student evidence (academics, attendance, LMS, engagement, placement practice, skills, feedback)
-        ↓
-Unified student record
-        ↓
-Deterministic calculation (no AI involved)
-        ↓
-Success Score + Review Index + Segment
-        ↓
-Readable explanation (AI optional, with fallback sentences)
-        ↓
-Role-based views: Student, Faculty, Recruiter, PDF report
+success score = 25 × CGPA/10 + 25 × attendance/100
+              + 25 × LMS assignment marks/100 + 25 × coding assessment/100
 ```
 
-### Success Score
-`Success score = sum of (normalised indicator × weight)`
+All four valid measurements are required. Combined review index = `triggered checks / assessed checks × 100`; this is a review aid, not a failure probability. Demo thresholds are CGPA below 6/10, attendance below 75%, LMS below 50/100, and coding below 50/100. Equality does not trigger a check. Specific reasons and score contributions are shown in the interface.
 
-| Indicator | Weight | Flag when below |
-|---|---:|---|
-| CGPA | 25% | 6 / 10 |
-| Attendance | 25% | 75 / 100 |
-| LMS assignment marks | 25% | 50 / 100 |
-| Coding assessment | 25% | 50 / 100 |
+Real accounts require institutional rules; they do not inherit the demo policy. Unverified projects and achievements do not receive invented points. LMS ranking describes the available demo class subset, not an official institutional rank. The score is not a validated predictor of academic or hiring outcomes.
 
-### Review Index
-`Review index = flagged checks / assessed checks`
+## Stack and tools
 
-Example: Aaman Sharma has a Success Score of **77/100**. One of four checks (coding, 48) is flagged, so his review index is **25%**.
+| Technology | Purpose and reason |
+| --- | --- |
+| Vite, HTML, CSS, vanilla JavaScript | Small modular browser runtime and quick iteration |
+| Supabase Auth and PostgreSQL | Managed identities and structured student persistence |
+| Row Level Security | Ownership and least-privilege access at the database boundary |
+| Supabase Edge Functions and Vault | Server-side narration and encrypted provider credentials |
+| Gemini | English representation of existing facts, with deterministic fallback |
+| jsPDF | Local vector PDF generation, loaded on demand |
+| Vercel | HTTPS frontend hosting; Supabase remains the backend |
+| Node test runner | Deterministic calculations and regression checks |
+| GitHub, Codex, Stitch references | Version control, development assistance, supplied visual direction |
 
-The review index is a fraction of checks. **It is not a failure probability.**
+Fonts and icons are bundled locally. Python is only an offline document-preparation tool, not a production backend. The architecture deliberately avoids another framework or server.
 
-### Segments
-- No current flags
-- Academic support suggested
-- Career practice suggested
-- Strong academics, career practice needed
+## Run locally
 
-### Views
-- **Student:** own standing, score contributions, improvement areas, calculation dialog.
-- **Faculty:** cohort counts, filters, segments, priority review list, student drill-down.
-- **Recruiter:** professional projection only. Private risk indices, faculty comments and support records are never included. Live consent-based access is not finished; the current view is a preview.
-- **Reports:** downloadable PDF with summary, segments, department review load, priority list and method notes.
+Use Node.js 22.23.1 or a compatible modern version. Vercel is configured for Node 22.x.
 
-### Design principles
-- Numbers come from algorithms. AI only words the explanation.
-- The app must work if the AI service is down.
-- A flag is a prompt for human review, not a judgment about a student.
-
-### Current results (synthetic, 500 students)
-| Metric | Value |
-|---|---:|
-| Students scored | 500 |
-| Mean success score | 72.6 / 100 |
-| Students needing review (at least one check) | 193 (38.6%) |
-| Academic flags | 147 |
-| Career-practice flags | 89 |
-| Priority list (2 or more flags) | 56 |
-
-Academic and career groups overlap and must not be added as distinct people.
-
-### Evidence from the latest checkpoint
-36 automated tests, a production build, database access checks, provider/fallback checks and visual review of generated reports all passed. Actual signed-in AI narration and browser download capture were **not** confirmed.
-
----
-
-## 3. Other Information: Major Remaining Problems and Proposed Solutions
-
-A demo and a trusted campus system have different requirements. The solutions below are **proposals, not completed features**.
-
-| # | Problem | Proposed solution |
-|---|---|---|
-| 1 | **Disconnected, inconsistent data** (different IDs, scales, update schedules) | Authorized import with identity reconciliation, ranges/units, source IDs, timestamps, deduplication and row-level error reports. Start with reviewed JSON/CSV batches before live connectors. |
-| 2 | **Unvalidated scoring and risk rules** (equal weights and thresholds are assumptions) | Faculty-approved, course-specific indicators and weights. Version the rules. Validate against consented historical outcomes using time-separated holdouts and subgroup checks. Keep calling it an index until evidence supports more. |
-| 3 | **Unverified projects and achievements** | Structured submissions, private evidence storage, faculty review, pending/verified/rejected status, reviewer and timestamp record, appeal path. Only approved rubrics convert evidence into points. |
-| 4 | **Faculty authorization and student support** | Faculty-to-cohort/subject assignments with RLS-scoped queries. Student-owned support tickets with faculty responses and history, kept separate from recruiter views. |
-| 5 | **Consent and recruiter access** | Server-enforced minimal projection, explicit field consent, revocation, recruiter approval and mediated contact. Test denied access as carefully as permitted reads. |
-| 6 | **Meaningful effort simulation** (sliders do not prove causation) | Illustrative model with fixed effort budget, mastery, credit weights and diminishing returns. Keep simulated outcomes separate from verified marks. |
-| 7 | **AI trust, availability and cost** | Keep code-based calculations, constrained wording and fallback sentences. Add a distributed quota and audit metadata without private prompt logs. |
-| 8 | **Account and operational readiness** | Staff provisioning, production Auth origins and SMTP, recovery, role revocation, error monitoring without private data, documented backups and rollback. Review the Supabase leaked-password-protection advisory. |
-| 9 | **Inclusive UX and complete profiles** | Broad course catalogs plus custom values, keyboard/screen-reader checks, concise report summaries and cohort filtering before large exports. |
-
-### Recommended rollout
-1. Verify hosted confirmation emails and real signed-in AI narration.
-2. Complete staff and consent-based access.
-3. Implement reviewed source imports and evidence verification.
-4. Add student doubts, persistent interventions and the richer simulator.
-5. Validate an institutional scoring policy, outcomes, fairness and reliability before broad adoption.
-
-Each module should produce a visible result, successful and denied-path checks, and a team review.
-
----
-
-## 4. Limitations and Honest Claims
-
-**We claim:** Porto-Star demonstrates evidence, explanation and a practical review action in one product.
-
-**We do not claim:**
-- increased placement rates
-- prediction of individual failure
-- completed integration with any college system
-- validated weights or thresholds
-- any institutional partnership or judging result
-
-Not yet built: live faculty/recruiter queries, source imports, evidence verification, student doubts and the richer effort simulator.
-
----
-
-## 5. Getting Started
-
-> Commands below assume a standard Vite project. Adjust names to match `package.json`.
-
-```bash
-git clone <your-repo-url>
-cd porto-star
-npm install
-npm run dev      # start local dev server
-npm test         # run the Node test suite
-npm run build    # production build
+```sh
+npm ci
+cp .env.example .env.local
+# Fill the public Supabase URL and publishable key.
+npm run dev
 ```
 
-Environment variables (never commit secrets):
+Open the URL printed by Vite, normally `http://127.0.0.1:5173`. Routes use hashes, such as `/#/login` and `/#/overview`.
+
+```sh
+npm test
+npm run build
+npm run preview
+npm run supabase:check
+```
+
+The connection check does not apply migrations. There is no configured lint command.
+
+## Environment and deployment
+
+The frontend requires `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY`. These are browser-public connection values. Never use a service-role key, Gemini key, or database password in a `VITE_` variable.
+
+`vercel.json` defines Vite, `npm ci`, `npm run build`, and output `dist`. Configure Supabase Auth's Site URL and allowed redirects for the deployed origin before relying on email-confirmation links.
+
+The existing Gemini function is deployed separately to Supabase. Server-only `GEMINI_API_KEY` and `GEMINI_MODEL` may override its protected Vault/default configuration. Keep the actual Vault secret out of Git. Migrations describe the database history, not a requirement to reapply them to an existing project.
+
+## Data and privacy
+
+- New students receive no Aaman/demo portfolio or measurements.
+- Student reads/writes are scoped to authenticated identity. UI role selection does not grant a role.
+- Account management is restricted to an authorized confirmed identity.
+- Public ghost records are synthetic, without passwords or Auth identities.
+- Recruiter fixtures omit private review metrics and support notes; live consent enforcement remains a backend requirement.
+- Gemini receives measurement facts without names/contact details and cannot overwrite numerical analysis.
+
+The seeded demo generator uses normal draws with a shared ability component, then clamps and rounds values. It retains five named fixtures and generates 495 additional records. This reproducible workload is not evidence of predictive accuracy. See [data format](docs/data/STUDENT_DATA_FORMAT.md). `scripts/generate-demo.mjs` writes files, not automatic database updates.
+
+## Repository map
+
 ```text
-VITE_SUPABASE_URL=<your-supabase-project-url>
-VITE_SUPABASE_ANON_KEY=<your-supabase-anon-key>
+src/app/              State, routing, interactions
+src/components/       Reusable interface components
+src/pages/            Role and authentication views
+src/services/         Data access, analytics, narration, reports
+src/styles/           Shared tokens and responsive CSS
+supabase/migrations/  Schema and permissions history
+supabase/functions/   Protected narration and shared mathematics
+supabase/seeds/       Synthetic demo and catalogs
+scripts/              Connection checks and offline generators
+tests/               Automated checks
+docs/                Setup, checkpoints, presentation references
+output/pdf/           Reviewed report and presentation PDFs
 ```
-The Gemini key lives in Supabase Vault and is used only by the Edge Function, never in frontend code.
 
----
+## Detailed presentation material
 
-## 6. Privacy and Responsible Use
-- Demo data is synthetic. Do not load real student data into the public demo.
-- Risk indices are decision support for human review, not punishment, public ranking or permanent labels.
-- Confirm source data before intervening on any flag.
+- [Latest code, data and security audit](docs/AUDIT_2026_10_08.md): fixes, 49 passing tests, deployment evidence and remaining limits.
 
----
+- [Project summary](docs/presentation/PROJECT_SUMMARY.md): problems, motivation, scope, stack and reasons.
+- [Solution description](docs/presentation/SOLUTION_DESCRIPTION.md): architecture, workflows, methods and example.
+- [Other information](docs/presentation/OTHER_INFORMATION.md): remaining problems, proposed solutions and rollout.
+- [Report, simulator and filter improvements](docs/IMPROVEMENT_MODULE_03.md).
+- [Analytics checkpoint](docs/ANALYTICS_MODULE_02.md): implementation evidence and verification limits.
+- [Student backend](docs/STUDENT_BACKEND.md), [Auth](docs/LOGIN_AUTH.md), [Supabase](docs/SUPABASE_INTEGRATION.md).
 
-## 7. Presentation Script (3 minutes)
+Earlier checkpoint documents are historical. The four root specifications describe product intent and operating constraints. The original brief and visual references are under `docs/reference/`.
 
-**Title:** "We are presenting Porto-Star. It turns scattered student data into clear, explainable support for students, faculty and recruiters."
+## GitHub development
 
-**Summary:** "Colleges keep marks, attendance, LMS, placement and skills data in separate places, so nobody sees the full picture. We chose this because it connects data to a real decision: who needs support, why, and what kind. We built it with vanilla JavaScript and Vite, Supabase for data, login and security, Gemini only for wording, jsPDF for reports and Vercel for hosting."
+Repository: `Rudra-Sharma-432/HacXLerate`, branch `codex`.
 
-**Solution:** "We unify 500 synthetic students. The Success Score combines CGPA, attendance, LMS marks and coding, 25% each. The review index is the share of flagged checks. Aaman scores 77, with one of four checks flagged, so 25%. Faculty can filter and see segments. Recruiters see only a separate professional view. Every score shows how it was calculated."
+```sh
+git status
+git add <reviewed-files>
+git commit -m "Describe the change"
+git push origin codex
+```
 
-**Other information:** "This is a prototype. Weights are not validated, live imports are not built, and faculty authorization and evidence verification are next. The score is a support index, not a failure prediction."
+Commit your changes before `git pull --rebase origin codex`. Keep credentials, `.env.local`, dependencies, and caches out of Git. A Git push does not automatically deploy Vercel until a Git integration and production branch are configured.
 
-**Close:** "Porto-Star shows who may need support, why, and what help to consider. Thank you."
+## Prototype limits
 
----
+The current six-control simulator links effort to CGPA, attendance, assignments, coding and the final index. Its coefficients, diminishing returns and workload penalty are explicit illustrative assumptions, without proven causal effort/CGPA relationships. The faculty history graph remains an explicitly labelled original five-student sample, not the history of all 500 records. Provider invocation, public rejection, local fallback, and database permissions were tested separately; actual signed-in narration still requires a real-account test. Reports were generated and visually reviewed; browser download capture was not confirmed at the preceding checkpoint.
 
-## 8. Project Documents
-- `analysis.md`: product, market and research analysis
-- `plan.md`: execution plan
-- Challenge: KPMG in India, *Smart Campus Analytics*
-
-## 9. Team and License
-- Team: *add names*
-- License: *owners to choose explicitly. No license is claimed here.*
+No open-source license has been chosen. Add one after repository owners agree on reuse terms.

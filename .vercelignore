@@ -1,0 +1,9 @@
+.git
+.env
+.env.*
+node_modules
+dist
+tmp
+output
+docs/reference
+docs/review

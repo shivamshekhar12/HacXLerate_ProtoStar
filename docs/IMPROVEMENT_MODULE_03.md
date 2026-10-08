@@ -1,0 +1,15 @@
+# Report, simulator and filter improvements
+
+8 October 2026. No database schema or access changes.
+
+- Removed the Frontend preview text from the navigation/sidebar, student banner and footer. Synthetic/demo disclosures remain.
+- Rebuilt downloadable reports using the supplied PDFs as visual references: navy/gold headers, metric cards, summary bands, threshold bars, contribution chart, source/subject tables, portfolio counts and clear limitations. Student example: two pages. Faculty example: landscape overview, department summary, priority review list and searchable full roster; 24 pages for 500 records rather than 72. Actual measurements/rules are preserved. Long ledger text is shortened to fit cells; source records remain unchanged.
+- Added six relative-effort controls: study, participation, assignments, coding, projects, competitions/achievements. Each ranges from -100% to +100%; zero preserves baseline. The scenario does not mutate source records.
+- Positive changes close a fraction of available headroom: `(maximum-current)*(1-exp(-1.5*effectiveEffort))`. Negative changes use `current*(exp(effectiveEffort)-1)`. Outcomes are bounded. Total positive allocations above 200 percentage points incur a shared penalty of 3 measurement percentage points per additional 100 allocated points.
+- Effective attendance effort = .85 participation + .15 study. LMS = .55 assignments + .20 study + .15 participation + .10 projects + .20 normalized attendance change. Coding = .60 coding + .25 projects + .10 study + .05 competition practice + .15 normalized LMS change. CGPA = .50 study + .20 assignments + .10 participation + .10 projects + .10 competition practice + .20 normalized attendance change + .25 normalized LMS change. Effort inputs are divided by 100 before calculation. These are illustrative assumptions, not calibrated causal coefficients.
+- Final scenario Success Score reuses the overview's configured four-indicator weights. Projects/achievement practice influences assumed outcomes; unverified claims do not gain direct points. Without valid baseline or approved policy, no score is invented.
+- Desktop simulator uses equal columns and stretched equal-height panels; mobile stacks the panels.
+- Recruiter skills, years and semesters support multiple checkbox selections. Every chosen skill is required; any chosen year/semester matches, and the three dimensions combine. Empty selection means unrestricted for that dimension. Missing education still fails an active education filter. Changes reset pagination; reset clears selections.
+- Faculty subject order supports highest-to-lowest and lowest-to-highest in the chart and ledger. Missing measurements remain last in both directions; ties use student name.
+
+Validation: 40 tests, including coupled effects, neutral baseline, workload/missing-data behavior, multi-filter semantics and missing-last sorting; production build. PDFs generated, parsed for all 500 IDs and rendered for visual review. Desktop simulator panel sizes were equal (475px wide, 767px high) at a 1280px viewport before final browser review. No live account or private database records changed.

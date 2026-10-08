@@ -1,0 +1,23 @@
+{
+  "name": "smart-campus-ai",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build",
+    "preview": "vite preview --host 127.0.0.1",
+    "test": "node --test",
+    "supabase:check": "node scripts/check-supabase.js"
+  },
+  "devDependencies": {
+    "vite": "^8.3.3"
+  },
+  "dependencies": {
+    "@fontsource/inter": "^5.3.0",
+    "@fontsource/plus-jakarta-sans": "^5.3.0",
+    "@material-symbols/font-400": "^0.47.6",
+    "@supabase/supabase-js": "2.117.3",
+    "jspdf": "4.2.1"
+  }
+}
