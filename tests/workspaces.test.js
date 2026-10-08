@@ -3,7 +3,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { demoStudent,demoPortfolio } from '../src/data/demo-student.js';
 import { candidates,matchRequirements,workspace,toggleShortlist,filteredStudents } from '../src/services/frontend-workspaces.js';
-const sample=()=>({student:structuredClone(demoStudent),portfolio:structuredClone(demoPortfolio)});
+import seed from '../supabase/seeds/demo-workspace.json' with {type:'json'};
+const sample=()=>({analyticsConfig:seed.analyticsConfig,student:structuredClone(demoStudent),portfolio:structuredClone(demoPortfolio)});
 test('student consent controls candidate visibility and individual professional fields',()=>{
   const s=sample();assert.equal(candidates(s).some(c=>c.id==='talent-aarav'),false);
   s.portfolio.consent={enabled:true,education:false,skills:false,projects:false};
@@ -12,7 +13,7 @@ test('student consent controls candidate visibility and individual professional 
 });
 test('recruiter model does not include faculty notes or internal measurements',()=>{
   const s=sample();s.portfolio.consent.enabled=true;
-  const allowed=['id','name','program','targetRole','skills','projects','achievements','summary'];
+  const allowed=['id','name','program','targetRole','skills','projects','achievements','summary','degree','year','semester','batch'];
   candidates(s).forEach(c=>assert.ok(Object.keys(c).every(key=>allowed.includes(key))));
   assert.ok(!JSON.stringify(candidates(s)).includes('attendance'));
 });

@@ -1,5 +1,6 @@
+import {analyzeStudent} from './analytics.js';
 import { cohort, professionalCandidates, initialRecruiterRole } from '../data/demo-campus.js';
-export const workspace = { notes:[], shortlist:[], requests:[], role:structuredClone(initialRecruiterRole), ui:{ cohort:'all', studentSearch:'', reviewOnly:false, talentSearch:'', talentSkill:'all', talentRole:'all', compare:[], requestFilter:'all', supportFilter:'all', subject:0 } };
+export const workspace = { notes:[], shortlist:[], requests:[], role:structuredClone(initialRecruiterRole), ui:{ cohort:'all', studentSearch:'', reviewOnly:false, talentSearch:'', talentSkill:'all', talentRole:'all',talentProgram:'all',talentDegree:'all',talentYear:'all',talentSemester:'all',talentBatch:'all',talentEvidence:'all',talentSort:'name',talentPage:0,studentPage:0, compare:[], requestFilter:'all', supportFilter:'all', subject:0 } };
 const storageKey='smart-campus:role-demos:v1';
 export function persistRoleWorkspace() {
   try { localStorage.setItem(storageKey,JSON.stringify({notes:workspace.notes,shortlist:workspace.shortlist,requests:workspace.requests,role:workspace.role})); return true; } catch { return false; }
@@ -15,7 +16,7 @@ export function restoreRoleWorkspace() {
   } catch { /* Use clean fixtures if local data is malformed. */ }
 }
 export function facultyStudents(state) {
-  return cohort.map(s=>s.id==='DEMO-001'?{...s,name:state.student.name,skills:state.portfolio.skills.map(x=>x.name)}:structuredClone(s));
+  return cohort.map(s=>{const row=s.id==='DEMO-001'?{...s,name:state.student.name,skills:state.portfolio.skills.map(x=>x.name)}:structuredClone(s);const analysis=analyzeStudent(row,state.analyticsConfig);return {...row,analysis,review:analysis.reasons.map(r=>r.text)};});
 }
 export function filteredStudents(state) {
   return facultyStudents(state).filter(s=>(workspace.ui.cohort==='all'||s.cohort===workspace.ui.cohort)&&(!workspace.ui.reviewOnly||s.review.length)&&s.name.toLowerCase().includes(workspace.ui.studentSearch.toLowerCase()));
@@ -24,13 +25,19 @@ export function candidates(state) {
   const items=structuredClone(professionalCandidates);
   if(state.portfolio.consent.enabled) {
     const consent=state.portfolio.consent;
-    items.unshift({id:'talent-aarav',name:state.student.name,targetRole:state.student.targetRole,program:consent.education?state.student.program:'Education not shared',skills:consent.skills?state.portfolio.skills.map(x=>x.name):[],projects:consent.projects?state.portfolio.projects.map(x=>({title:x.title,description:x.description})):[],achievements:[],summary:'Student-selected professional profile from the local demo workspace.'});
+    items.unshift({id:'talent-aarav',name:state.student.name,targetRole:state.student.targetRole,program:consent.education?state.student.program:'Education not shared',degree:consent.education?state.student.degree:undefined,year:consent.education?state.student.year:undefined,semester:consent.education?state.student.semester:undefined,batch:consent.education?state.student.batch:undefined,skills:consent.skills?state.portfolio.skills.map(x=>x.name):[],projects:consent.projects?state.portfolio.projects.map(x=>({title:x.title,description:x.description})):[],achievements:[],summary:'Student-selected professional profile from the local demo workspace.'});
   }
   return items;
 }
-export function filteredCandidates(state) {
-  return candidates(state).filter(c=>(workspace.ui.talentRole==='all'||c.targetRole===workspace.ui.talentRole)&&(workspace.ui.talentSkill==='all'||c.skills.includes(workspace.ui.talentSkill))&&`${c.name} ${c.skills.join(' ')} ${c.program}`.toLowerCase().includes(workspace.ui.talentSearch.toLowerCase()));
+export function filterCandidateRecords(items,filters,role={required:[]}) {
+ const q=(filters.talentSearch??'').toLowerCase().trim();
+ const equal=(key,value)=>!filters[key]||filters[key]==='all'||String(value??'')===String(filters[key]);
+ // Only professional, consent-selected fields enter search, filters and sorting.
+ const rows=items.filter(c=>equal('talentRole',c.targetRole)&&(!filters.talentSkill||filters.talentSkill==='all'||c.skills.some(s=>s.toLowerCase()===filters.talentSkill.toLowerCase()))&&equal('talentProgram',c.program)&&equal('talentDegree',c.degree)&&equal('talentYear',c.year)&&equal('talentSemester',c.semester)&&equal('talentBatch',c.batch)&&(!filters.talentEvidence||filters.talentEvidence==='all'||(filters.talentEvidence==='projects'?c.projects.length>0:c.projects.length===0))&&`${c.name} ${c.skills.join(' ')} ${c.program} ${c.targetRole}`.toLowerCase().includes(q));
+ return rows.sort((a,b)=>filters.talentSort==='projects'?b.projects.length-a.projects.length||a.name.localeCompare(b.name):filters.talentSort==='skills'?matchRequirements(b,role).filter(r=>r.matched).length-matchRequirements(a,role).filter(r=>r.matched).length||a.name.localeCompare(b.name):a.name.localeCompare(b.name));
 }
+export function filteredCandidates(state){return filterCandidateRecords(candidates(state),workspace.ui,workspace.role);}
+export function resetTalentFilters(){Object.assign(workspace.ui,{talentPage:0,talentSearch:'',talentRole:'all',talentSkill:'all',talentProgram:'all',talentDegree:'all',talentYear:'all',talentSemester:'all',talentBatch:'all',talentEvidence:'all',talentSort:'name'});}
 export function matchRequirements(candidate, role=workspace.role) {
   const lookup=new Set(candidate.skills.map(s=>s.toLowerCase()));
   return role.required.map(skill=>({skill,matched:lookup.has(skill.toLowerCase())}));

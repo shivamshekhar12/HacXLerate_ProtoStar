@@ -11,7 +11,7 @@ export function readGoal() {
   return null;
 }
 export const state = {
-  student: null, goal: null, portfolio: null, history: [], mode: null, revision: 0,
+  student: null, goal: null, portfolio: null, history: [], subjectRecords: [], mode: null, revision: 0,
   storageAvailable: true, ui: { chartMetric: 'academic', skillSearch: '', skillFilter: 'all', scenario: null },
 };
 function persist(key, value) {
@@ -30,13 +30,13 @@ export function restoreWorkspace() {
     const saved = JSON.parse(localStorage.getItem(workspaceKey));
     if (!saved || !saved.student || !saved.portfolio) return;
     const { student: s, portfolio: p } = saved;
-    if (typeof s.name !== 'string' || !s.name.trim() || s.name.length > 80 || typeof s.program !== 'string' || s.program.length > 120 || !Number.isInteger(s.year) || s.year < 1 || s.year > 6 || !Number.isInteger(s.semester) || s.semester < 1 || s.semester > 12) return;
-    if (!['Software Developer', 'Data Analyst', 'AI Engineer'].includes(s.targetRole)) return;
+    if (typeof s.name !== 'string' || !s.name.trim() || s.name.length > 80 || typeof s.program !== 'string' || s.program.length > 120 || !Number.isInteger(s.year) || s.year < 1 || s.year > 10 || !Number.isInteger(s.semester) || s.semester < 1 || s.semester > 20) return;
+    if (typeof s.targetRole!=='string'||s.targetRole.length>100) return;
     if (!Array.isArray(p.skills) || p.skills.length > 30 || !p.skills.every(x => typeof x.id === 'string' && typeof x.name === 'string' && x.name.length <= 60 && typeof x.evidence === 'string' && x.evidence.length <= 160 && ['Developing', 'Intermediate', 'Advanced'].includes(x.level))) return;
     if (!Array.isArray(p.projects) || p.projects.length > 20 || !p.projects.every(x => ['id','title','description','skills','url'].every(k => typeof x[k] === 'string') && x.title.length <= 100 && x.description.length <= 500 && x.skills.length <= 160 && x.url.length <= 500)) return;
     if (!p.consent || !['enabled','skills','projects','education'].every(k => typeof p.consent[k] === 'boolean')) return;
     // Never restore externally edited raw indicators or identity/authorization fields.
-    Object.assign(state.student, { name: s.name, program: s.program, year: s.year, semester: s.semester, targetRole: s.targetRole });
+    Object.assign(state.student, { name: s.name, program: s.program, year: s.year, semester: s.semester, targetRole: s.targetRole,degree:typeof s.degree==='string'&&s.degree.length<=80?s.degree:'',batch:typeof s.batch==='string'&&s.batch.length<=40?s.batch:'' });
     Object.assign(state.portfolio, { skills: p.skills, projects: p.projects, consent: p.consent });
     for (const key of ['experience','achievements']) {
       if (Array.isArray(p[key]) && p[key].length <= 20 && p[key].every(x => x && typeof x.id === 'string' && typeof x.title === 'string' && x.title.length <= 100 && typeof x.description === 'string' && x.description.length <= 500)) state.portfolio[key] = p[key];

@@ -2,7 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import seed from '../supabase/seeds/demo-workspace.json' with {type:'json'};
 import {loadDemo} from '../src/services/student-service.js';
-const client={from:()=>({select:()=>({eq:()=>({single:async()=>({data:{payload:seed},error:null})})})})};
+import catalogSeed from '../supabase/seeds/campus-catalog.json' with {type:'json'};
+const client={from:(table)=>({select:()=>({eq:()=>({single:async()=>({data:{payload:table==='campus_catalog'?catalogSeed:seed},error:null})})})})};
 import { escapeHtml } from '../src/components/ui.js';
 import { readGoal, saveGoal, state } from '../src/app/state.js';
 

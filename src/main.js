@@ -20,9 +20,11 @@ import { getSupabaseClient } from './services/supabase/client.js';
 import { renderShell, updateRoleNavigation } from './components/shell.js';
 import { state, restoreWorkspace, readGoal } from './app/state.js';
 import { loadDemo,loadStudent } from './services/student-service.js';
-import { setRoleTemplates } from './data/demo-student.js';
+import {loadCatalog} from './services/catalog-service.js';
+import {renderStudentSubjects} from './pages/student/subjects.js';
 import { renderManagement,bindManagement } from './pages/auth/management.js';
 import { escapeHtml } from './components/ui.js';
+import {bindAnalyticsActions} from './app/analytics-actions.js';
 import { bindActions } from './app/actions.js';
 import { renderOverview } from './pages/student/overview.js';
 import { renderGrowth } from './pages/student/growth.js';
@@ -32,6 +34,7 @@ import { renderProfile } from './pages/student/profile.js';
 
 const pages = {
   overview: { render: renderOverview, title: 'Student Overview' },
+  subjects: {render:renderStudentSubjects,title:'Subject Analysis'},
   growth: { render: renderGrowth, title: 'My Growth' },
   skills: { render: renderSkills, title: 'Skills & Target Role' },
   simulator: { render: renderSimulator, title: 'What-If Simulator' },
@@ -64,13 +67,13 @@ async function hydrateWorkspace(){
  if(version!==loadVersion||id!==(authState.account?.user.id??'demo')||(!live&&!demoEnabled()))return;
  Object.assign(state,data,{mode:live?'live':'demo',ui:{chartMetric:'academic',skillSearch:'',skillFilter:'all',scenario:null}});
  if(!live){restoreWorkspace();state.goal=readGoal();}
- else {const catalog=await client.from('demo_workspaces').select('roles:payload->demoRoles').eq('slug','aaman').single();if(catalog.error)throw new Error('Could not load role templates.');setRoleTemplates(catalog.data.roles);}
+ else await loadCatalog(client);
  loadedWorkspace=id;
 }
 function mountShell() {
   if (disposeShell) return;
   disposeShell = renderShell();
-  bindActions(render); bindWorkspaceActions(render);
+  bindActions(render); bindWorkspaceActions(render); bindAnalyticsActions();
   document.querySelector('#workspace-role').addEventListener('change', event => {
     if (!authState.account) location.hash = '#/' + {student:'overview',faculty:'faculty',recruiter:'recruiter'}[event.target.value];
   });
@@ -97,7 +100,7 @@ async function render() {
     if (authState.account) { location.hash = '#/' + (roleHome(authState.account.role)??'pending'); return; }
     if (disposeShell) { disposeShell(); disposeShell = null; }
     document.querySelector('#app').innerHTML = renderLogin({configured:Boolean(client),signup:name==='signup',management:name==='management/login'});
-    document.title = `${name==='signup'?'Create Account':'Sign In'} · Smart Campus`;
+    document.title = `${name==='signup'?'Create Account':'Sign In'} · Porto-Star`;
     bindLogin(client, account => {authState.account = account;loadedWorkspace=null;});
     return;
   }
@@ -110,7 +113,7 @@ async function render() {
     if(!authState.account){location.hash='#/management/login';return;}
     const permission=await client.rpc('can_manage_accounts');
     if(permission.error||!permission.data){location.hash='#/'+roleHome(authState.account.role);return;}
-    standalone(renderManagement());document.title='Account management · Smart Campus';
+    standalone(renderManagement());document.title='Account management · Porto-Star';
     await bindManagement(client,()=>exitAccount().catch(()=>alert('Could not sign out. Please retry.')));return;
   }
   const role = routeRole(name);
@@ -126,7 +129,7 @@ async function render() {
   if(authState.account&&role!=='student'){document.querySelector('#main').innerHTML='<section class="panel"><h1>Workspace registered</h1><p>Live faculty/recruiter services are awaiting cohort and consent configuration. Real student records are not shown here.</p></section>';return;}
   const page = pages[name] ?? (name.startsWith('faculty/student/') ? {render:s=>renderStudentDetail(s,name.split('/')[2]),title:'Student Detail'} : name.startsWith('recruiter/candidate/') ? {render:s=>renderCandidate(s,name.split('/')[2]),title:'Candidate Profile'} : null);
   document.querySelector('#main').innerHTML = page?.render(state) ?? '<section class="panel"><h1>Page not found</h1><p>This page is not part of this frontend.</p><a class="button" href="#/overview">Return to overview</a></section>';
-  document.title = `${page?.title ?? 'Page not found'} · Smart Campus`;
+  document.title = `${page?.title ?? 'Page not found'} · Porto-Star`;
   document.querySelectorAll('[data-route]').forEach(a => {
     const active = name.startsWith('faculty/student/') ? 'faculty/students' : name.startsWith('recruiter/candidate/') ? 'recruiter/talent' : name;
     if (a.dataset.route === active) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
@@ -146,7 +149,7 @@ async function render() {
 document.querySelector('.skip-link').addEventListener('click', event => {
   event.preventDefault(); document.querySelector('#main')?.focus(); document.querySelector('#main')?.scrollIntoView();
 });
-document.querySelector('#app').innerHTML = '<main id="main" class="login-loading" aria-busy="true"><section class="panel"><h1>Welcome to Smart Campus</h1><p>Checking your session…</p></section></main>';
+document.querySelector('#app').innerHTML = '<main id="main" class="login-loading" aria-busy="true"><section class="panel"><h1>Welcome to Porto-Star</h1><p>Checking your session…</p></section></main>';
 try {
   client = getSupabaseClient();
   

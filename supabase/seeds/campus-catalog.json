@@ -1,0 +1,543 @@
+{
+  "roles": [
+    {
+      "title": "Software Developer",
+      "group": "Technology & data",
+      "description": "An illustrative career direction in technology & data. Adapt the example skills to your course and goals.",
+      "requirements": [
+        "JavaScript",
+        "SQL",
+        "Git",
+        "Data Structures"
+      ]
+    },
+    {
+      "title": "Data Analyst",
+      "group": "Technology & data",
+      "description": "An illustrative career direction in technology & data. Adapt the example skills to your course and goals.",
+      "requirements": [
+        "SQL",
+        "Statistics",
+        "Data Visualization"
+      ]
+    },
+    {
+      "title": "AI Engineer",
+      "group": "Technology & data",
+      "description": "An illustrative career direction in technology & data. Adapt the example skills to your course and goals.",
+      "requirements": [
+        "Python",
+        "Machine Learning",
+        "Model Evaluation"
+      ]
+    },
+    {
+      "title": "Web Developer",
+      "group": "Technology & data",
+      "description": "An illustrative career direction in technology & data. Adapt the example skills to your course and goals.",
+      "requirements": [
+        "HTML",
+        "CSS",
+        "JavaScript"
+      ]
+    },
+    {
+      "title": "Mobile App Developer",
+      "group": "Technology & data",
+      "description": "An illustrative career direction in technology & data. Adapt the example skills to your course and goals.",
+      "requirements": [
+        "Mobile Development",
+        "API Integration",
+        "Testing"
+      ]
+    },
+    {
+      "title": "Cybersecurity Analyst",
+      "group": "Technology & data",
+      "description": "An illustrative career direction in technology & data. Adapt the example skills to your course and goals.",
+      "requirements": [
+        "Networking",
+        "Security Analysis",
+        "Risk Assessment"
+      ]
+    },
+    {
+      "title": "Cloud Engineer",
+      "group": "Technology & data",
+      "description": "An illustrative career direction in technology & data. Adapt the example skills to your course and goals.",
+      "requirements": [
+        "Cloud Computing",
+        "Networking",
+        "Linux"
+      ]
+    },
+    {
+      "title": "DevOps Engineer",
+      "group": "Technology & data",
+      "description": "An illustrative career direction in technology & data. Adapt the example skills to your course and goals.",
+      "requirements": [
+        "Linux",
+        "CI/CD",
+        "Automation"
+      ]
+    },
+    {
+      "title": "QA Engineer",
+      "group": "Technology & data",
+      "description": "An illustrative career direction in technology & data. Adapt the example skills to your course and goals.",
+      "requirements": [
+        "Testing",
+        "Test Automation",
+        "Documentation"
+      ]
+    },
+    {
+      "title": "Data Engineer",
+      "group": "Technology & data",
+      "description": "An illustrative career direction in technology & data. Adapt the example skills to your course and goals.",
+      "requirements": [
+        "SQL",
+        "Data Pipelines",
+        "Python"
+      ]
+    },
+    {
+      "title": "UX Designer",
+      "group": "Technology & data",
+      "description": "An illustrative career direction in technology & data. Adapt the example skills to your course and goals.",
+      "requirements": [
+        "User Research",
+        "Prototyping",
+        "Accessibility"
+      ]
+    },
+    {
+      "title": "Product Manager",
+      "group": "Technology & data",
+      "description": "An illustrative career direction in technology & data. Adapt the example skills to your course and goals.",
+      "requirements": [
+        "Product Planning",
+        "User Research",
+        "Communication"
+      ]
+    },
+    {
+      "title": "Mechanical Engineer",
+      "group": "Engineering",
+      "description": "An illustrative career direction in engineering. Adapt the example skills to your course and goals.",
+      "requirements": [
+        "Mechanics",
+        "CAD",
+        "Manufacturing"
+      ]
+    },
+    {
+      "title": "Civil Engineer",
+      "group": "Engineering",
+      "description": "An illustrative career direction in engineering. Adapt the example skills to your course and goals.",
+      "requirements": [
+        "Structural Analysis",
+        "CAD",
+        "Project Planning"
+      ]
+    },
+    {
+      "title": "Electrical Engineer",
+      "group": "Engineering",
+      "description": "An illustrative career direction in engineering. Adapt the example skills to your course and goals.",
+      "requirements": [
+        "Circuit Analysis",
+        "Electrical Systems",
+        "Safety"
+      ]
+    },
+    {
+      "title": "Electronics Engineer",
+      "group": "Engineering",
+      "description": "An illustrative career direction in engineering. Adapt the example skills to your course and goals.",
+      "requirements": [
+        "Electronics",
+        "Embedded Systems",
+        "Circuit Design"
+      ]
+    },
+    {
+      "title": "Chemical Engineer",
+      "group": "Engineering",
+      "description": "An illustrative career direction in engineering. Adapt the example skills to your course and goals.",
+      "requirements": [
+        "Process Design",
+        "Chemistry",
+        "Safety"
+      ]
+    },
+    {
+      "title": "Robotics Engineer",
+      "group": "Engineering",
+      "description": "An illustrative career direction in engineering. Adapt the example skills to your course and goals.",
+      "requirements": [
+        "Control Systems",
+        "Programming",
+        "Electronics"
+      ]
+    },
+    {
+      "title": "Biomedical Engineer",
+      "group": "Engineering",
+      "description": "An illustrative career direction in engineering. Adapt the example skills to your course and goals.",
+      "requirements": [
+        "Biology",
+        "Engineering Design",
+        "Instrumentation"
+      ]
+    },
+    {
+      "title": "Environmental Engineer",
+      "group": "Engineering",
+      "description": "An illustrative career direction in engineering. Adapt the example skills to your course and goals.",
+      "requirements": [
+        "Environmental Science",
+        "Data Analysis",
+        "Sustainability"
+      ]
+    },
+    {
+      "title": "Financial Analyst",
+      "group": "Business & finance",
+      "description": "An illustrative career direction in business & finance. Adapt the example skills to your course and goals.",
+      "requirements": [
+        "Financial Analysis",
+        "Spreadsheets",
+        "Accounting"
+      ]
+    },
+    {
+      "title": "Accountant",
+      "group": "Business & finance",
+      "description": "An illustrative career direction in business & finance. Adapt the example skills to your course and goals.",
+      "requirements": [
+        "Accounting",
+        "Taxation",
+        "Spreadsheets"
+      ]
+    },
+    {
+      "title": "Business Analyst",
+      "group": "Business & finance",
+      "description": "An illustrative career direction in business & finance. Adapt the example skills to your course and goals.",
+      "requirements": [
+        "Requirements Analysis",
+        "Data Analysis",
+        "Communication"
+      ]
+    },
+    {
+      "title": "Marketing Specialist",
+      "group": "Business & finance",
+      "description": "An illustrative career direction in business & finance. Adapt the example skills to your course and goals.",
+      "requirements": [
+        "Market Research",
+        "Content Strategy",
+        "Analytics"
+      ]
+    },
+    {
+      "title": "HR Specialist",
+      "group": "Business & finance",
+      "description": "An illustrative career direction in business & finance. Adapt the example skills to your course and goals.",
+      "requirements": [
+        "Communication",
+        "Recruitment",
+        "Employment Practices"
+      ]
+    },
+    {
+      "title": "Operations Analyst",
+      "group": "Business & finance",
+      "description": "An illustrative career direction in business & finance. Adapt the example skills to your course and goals.",
+      "requirements": [
+        "Process Analysis",
+        "Statistics",
+        "Spreadsheets"
+      ]
+    },
+    {
+      "title": "Entrepreneur",
+      "group": "Business & finance",
+      "description": "An illustrative career direction in business & finance. Adapt the example skills to your course and goals.",
+      "requirements": [
+        "Business Planning",
+        "Customer Research",
+        "Finance"
+      ]
+    },
+    {
+      "title": "Research Scientist",
+      "group": "Health & life sciences",
+      "description": "An illustrative career direction in health & life sciences. Adapt the example skills to your course and goals.",
+      "requirements": [
+        "Research Methods",
+        "Data Analysis",
+        "Scientific Writing"
+      ]
+    },
+    {
+      "title": "Biotechnology Researcher",
+      "group": "Health & life sciences",
+      "description": "An illustrative career direction in health & life sciences. Adapt the example skills to your course and goals.",
+      "requirements": [
+        "Biotechnology",
+        "Laboratory Methods",
+        "Research"
+      ]
+    },
+    {
+      "title": "Pharmacist",
+      "group": "Health & life sciences",
+      "description": "An illustrative career direction in health & life sciences. Adapt the example skills to your course and goals.",
+      "requirements": [
+        "Pharmacology",
+        "Patient Communication",
+        "Professional Practice"
+      ]
+    },
+    {
+      "title": "Nursing Professional",
+      "group": "Health & life sciences",
+      "description": "An illustrative career direction in health & life sciences. Adapt the example skills to your course and goals.",
+      "requirements": [
+        "Clinical Skills",
+        "Patient Care",
+        "Communication"
+      ]
+    },
+    {
+      "title": "Public Health Analyst",
+      "group": "Health & life sciences",
+      "description": "An illustrative career direction in health & life sciences. Adapt the example skills to your course and goals.",
+      "requirements": [
+        "Epidemiology",
+        "Statistics",
+        "Research"
+      ]
+    },
+    {
+      "title": "Graphic Designer",
+      "group": "Arts, law & education",
+      "description": "An illustrative career direction in arts, law & education. Adapt the example skills to your course and goals.",
+      "requirements": [
+        "Visual Design",
+        "Typography",
+        "Design Tools"
+      ]
+    },
+    {
+      "title": "Architect",
+      "group": "Arts, law & education",
+      "description": "An illustrative career direction in arts, law & education. Adapt the example skills to your course and goals.",
+      "requirements": [
+        "Architectural Design",
+        "CAD",
+        "Building Systems"
+      ]
+    },
+    {
+      "title": "Journalist",
+      "group": "Arts, law & education",
+      "description": "An illustrative career direction in arts, law & education. Adapt the example skills to your course and goals.",
+      "requirements": [
+        "Research",
+        "Writing",
+        "Interviewing"
+      ]
+    },
+    {
+      "title": "Content Writer",
+      "group": "Arts, law & education",
+      "description": "An illustrative career direction in arts, law & education. Adapt the example skills to your course and goals.",
+      "requirements": [
+        "Writing",
+        "Editing",
+        "Research"
+      ]
+    },
+    {
+      "title": "Legal Researcher",
+      "group": "Arts, law & education",
+      "description": "An illustrative career direction in arts, law & education. Adapt the example skills to your course and goals.",
+      "requirements": [
+        "Legal Research",
+        "Analysis",
+        "Writing"
+      ]
+    },
+    {
+      "title": "Teacher",
+      "group": "Arts, law & education",
+      "description": "An illustrative career direction in arts, law & education. Adapt the example skills to your course and goals.",
+      "requirements": [
+        "Subject Knowledge",
+        "Lesson Planning",
+        "Communication"
+      ]
+    },
+    {
+      "title": "Social Researcher",
+      "group": "Arts, law & education",
+      "description": "An illustrative career direction in arts, law & education. Adapt the example skills to your course and goals.",
+      "requirements": [
+        "Research Methods",
+        "Statistics",
+        "Writing"
+      ]
+    },
+    {
+      "title": "Public Policy Analyst",
+      "group": "Arts, law & education",
+      "description": "An illustrative career direction in arts, law & education. Adapt the example skills to your course and goals.",
+      "requirements": [
+        "Policy Research",
+        "Data Analysis",
+        "Communication"
+      ]
+    }
+  ],
+  "degrees": [
+    "Diploma",
+    "Advanced Diploma",
+    "B.Tech",
+    "B.E.",
+    "B.Sc",
+    "B.A.",
+    "B.Com",
+    "BBA",
+    "BCA",
+    "B.Des",
+    "B.Arch",
+    "B.Pharm",
+    "B.Sc Nursing",
+    "MBBS",
+    "BDS",
+    "BVSc",
+    "LLB",
+    "BA LLB",
+    "B.Ed",
+    "B.P.Ed",
+    "BFA",
+    "BHM",
+    "M.Tech",
+    "M.E.",
+    "M.Sc",
+    "M.A.",
+    "M.Com",
+    "MBA",
+    "MCA",
+    "M.Des",
+    "M.Arch",
+    "M.Pharm",
+    "MPH",
+    "LLM",
+    "M.Ed",
+    "MFA",
+    "PG Diploma",
+    "PhD",
+    "Integrated Masters"
+  ],
+  "programs": [
+    "Computer Science",
+    "Information Technology",
+    "Artificial Intelligence",
+    "AI & Data Science",
+    "Data Science",
+    "Cybersecurity",
+    "Software Engineering",
+    "Electronics & Communication",
+    "Electrical Engineering",
+    "Mechanical Engineering",
+    "Civil Engineering",
+    "Chemical Engineering",
+    "Robotics",
+    "Biomedical Engineering",
+    "Environmental Engineering",
+    "Aerospace Engineering",
+    "Biotechnology",
+    "Mathematics",
+    "Physics",
+    "Chemistry",
+    "Statistics",
+    "Biology",
+    "Microbiology",
+    "Agriculture",
+    "Medicine",
+    "Dentistry",
+    "Nursing",
+    "Pharmacy",
+    "Public Health",
+    "Psychology",
+    "Economics",
+    "Commerce",
+    "Accounting",
+    "Finance",
+    "Business Administration",
+    "Marketing",
+    "Human Resources",
+    "Operations Management",
+    "Hospitality Management",
+    "Law",
+    "Education",
+    "English",
+    "History",
+    "Political Science",
+    "Sociology",
+    "Social Work",
+    "Journalism",
+    "Mass Communication",
+    "Fine Arts",
+    "Graphic Design",
+    "Product Design",
+    "Architecture",
+    "Animation",
+    "Fashion Design",
+    "Interior Design",
+    "Physical Education"
+  ],
+  "subjects": [
+    "Data Structures",
+    "Database Systems",
+    "AI & Machine Learning",
+    "Cloud Computing",
+    "Computer Networks",
+    "Discrete Mathematics",
+    "Operating Systems",
+    "Software Engineering",
+    "Cybersecurity",
+    "Probability & Statistics",
+    "Engineering Mathematics",
+    "Physics",
+    "Chemistry",
+    "Electrical Circuits",
+    "Engineering Mechanics",
+    "Thermodynamics",
+    "Structural Analysis",
+    "Environmental Studies",
+    "Research Methods",
+    "Financial Accounting",
+    "Business Economics",
+    "Marketing Management",
+    "Organizational Behaviour",
+    "Business Communication",
+    "Biochemistry",
+    "Human Anatomy",
+    "Pharmacology",
+    "Microbiology",
+    "Clinical Practice",
+    "Constitutional Law",
+    "Legal Methods",
+    "Educational Psychology",
+    "Literature",
+    "History",
+    "Sociology",
+    "Design Fundamentals",
+    "Architectural Design"
+  ]
+}

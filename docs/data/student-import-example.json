@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "synthetic": true,
+  "students": [
+    {
+      "id": "DEMO-001",
+      "name": "Aaman Sharma",
+      "cohort": "AI · Year 3",
+      "cgpa": 8.2,
+      "attendance": 89,
+      "modules": 4,
+      "coding": 48,
+      "skills": [
+        "JavaScript",
+        "SQL"
+      ],
+      "review": [
+        "Coding practice evidence would help the career discussion."
+      ],
+      "subjects": [
+        82,
+        78,
+        86
+      ],
+      "degree": "B.Tech",
+      "year": 3,
+      "semester": 5,
+      "batch": "2024–2028",
+      "synthetic": true,
+      "lmsMarks": 89,
+      "lmsMax": 100,
+      "assignmentCompletion": 66.66666666666666,
+      "backlogs": 0,
+      "subjectMarks": {
+        "Data Structures": 82,
+        "Database Systems": 78,
+        "AI & Machine Learning": 86
+      },
+      "engagement": {
+        "events": 2,
+        "hackathons": 1,
+        "certifications": 0
+      },
+      "placement": {
+        "coding": 48,
+        "aptitude": 48,
+        "mockInterview": 49
+      },
+      "feedback": null,
+      "program": "Artificial Intelligence"
+    },
+    {
+      "id": "DEMO-002",
+      "name": "Priya Nair",
+      "cohort": "AI · Year 3",
+      "cgpa": 8.8,
+      "attendance": 94,
+      "modules": 6,
+      "coding": 78,
+      "skills": [
+        "Python",
+        "SQL",
+        "Statistics"
+      ],
+      "review": [],
+      "subjects": [
+        89,
+        87,
+        88
+      ],
+      "degree": "B.Tech",
+      "year": 3,
+      "semester": 5,
+      "batch": "2024–2028",
+      "synthetic": true,
+      "lmsMarks": 92,
+      "lmsMax": 100,
+      "assignmentCompletion": 100,
+      "backlogs": 0,
+      "subjectMarks": {
+        "Data Structures": 89,
+        "Database Systems": 87,
+        "AI & Machine Learning": 88
+      },
+      "engagement": {
+        "events": 2,
+        "hackathons": 1,
+        "certifications": 0
+      },
+      "placement": {
+        "coding": 78,
+        "aptitude": 73,
+        "mockInterview": 56
+      },
+      "feedback": null,
+      "program": "Artificial Intelligence"
+    }
+  ]
+}

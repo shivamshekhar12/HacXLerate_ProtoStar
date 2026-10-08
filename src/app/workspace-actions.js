@@ -1,12 +1,14 @@
 import { icon,escapeHtml as e,announce } from '../components/ui.js';
 import { formDialog } from './actions.js';
 import { state } from './state.js';
-import { workspace,persistRoleWorkspace,facultyStudents,candidates,toggleShortlist } from '../services/frontend-workspaces.js';
+import { workspace,persistRoleWorkspace,facultyStudents,candidates,toggleShortlist,resetTalentFilters,filteredCandidates,filteredStudents } from '../services/frontend-workspaces.js';
 import { studentRows } from '../pages/faculty/workspace.js';
 import { candidateCards } from '../pages/recruiter/workspace.js';
 function saved(render,message){const persisted=persistRoleWorkspace();render();announce(`${message}${persisted?' Saved in this browser.':' Saved for this session only; storage is unavailable.'}`);}
 export function bindWorkspaceActions(render){
   const main=document.querySelector('#main');
+  function updatePager(kind,count){const id=kind==='talent'?'talent-page-count':'student-page-count';const label=document.getElementById(id);if(label)label.textContent=`Page 1 of ${Math.max(1,Math.ceil(count/25))}`;const prev=main.querySelector(`[data-page="${kind}-prev"]`),next=main.querySelector(`[data-page="${kind}-next"]`);if(prev)prev.disabled=true;if(next)next.disabled=count<=25;}
+
   function supportDialog(studentId){
     const students=facultyStudents(state);
     formDialog('Log faculty support action',`<p>Use synthetic information only. This is a local faculty preview.</p><label for="support-student">Student</label><select name="studentId" id="support-student">${students.map(s=>`<option value="${s.id}" ${s.id===studentId?'selected':''}>${e(s.name)}</option>`).join('')}</select><label for="support-category">Support category</label><select id="support-category" name="category"><option>Academic guidance</option><option>Learning support</option><option>Career preparation</option></select><label for="support-note">Action & context</label><textarea id="support-note" name="note" rows="4" maxlength="1000" required></textarea><label for="support-date">Follow-up date (optional)</label><input type="date" id="support-date" name="followUp"/>`,v=>{
@@ -16,7 +18,10 @@ export function bindWorkspaceActions(render){
     });
   }
   main.addEventListener('click',event=>{
-    const button=event.target.closest('[data-support-student],[data-support-toggle],[data-shortlist],[data-request],[data-withdraw-request],[data-action="record-support"]');if(!button)return;
+    const page=event.target.closest('[data-page]');if(page){const kind=page.dataset.page.startsWith('talent')?'talentPage':'studentPage';const count=kind==='talentPage'?filteredCandidates(state).length:filteredStudents(state).length;workspace.ui[kind]=Math.max(0,Math.min(Math.max(0,Math.ceil(count/25)-1),(workspace.ui[kind]??0)+(page.dataset.page.endsWith('next')?1:-1)));render();return;}
+
+    const button=event.target.closest('[data-support-student],[data-support-toggle],[data-shortlist],[data-request],[data-withdraw-request],[data-action="record-support"],[data-action="reset-talent-filters"]');if(!button)return;
+    if(button.dataset.action==='reset-talent-filters'){resetTalentFilters();render();return;}
     if(button.hasAttribute('data-support-student')||button.dataset.action==='record-support'){supportDialog(button.dataset.supportStudent);return;}
     if(button.dataset.supportToggle){const n=workspace.notes.find(x=>x.id===button.dataset.supportToggle);if(n){n.status=n.status==='Open'?'Complete':'Open';saved(render,'Support action updated.');}return;}
     if(button.dataset.shortlist){if(!candidates(state).some(c=>c.id===button.dataset.shortlist))return;toggleShortlist(button.dataset.shortlist);saved(render,'Shortlist updated.');return;}
@@ -32,15 +37,15 @@ export function bindWorkspaceActions(render){
     if(button.dataset.withdrawRequest){const r=workspace.requests.find(r=>r.id===button.dataset.withdrawRequest);if(r){r.status='Withdrawn';saved(render,'Local draft withdrawn.');}}
   });
   main.addEventListener('input',event=>{
-    if(event.target.id==='student-search'){workspace.ui.studentSearch=event.target.value;document.querySelector('#student-results').innerHTML=studentRows(state);}
-    if(event.target.id==='talent-search'){workspace.ui.talentSearch=event.target.value;document.querySelector('#talent-results').innerHTML=candidateCards(state);}
+    if(event.target.id==='student-search'){workspace.ui.studentPage=0;workspace.ui.studentSearch=event.target.value;document.querySelector('#student-results').innerHTML=studentRows(state);updatePager('students',filteredStudents(state).length);}
+    if(event.target.id==='talent-search'){workspace.ui.talentPage=0;workspace.ui.talentSearch=event.target.value;document.querySelector('#talent-results').innerHTML=candidateCards(state);document.querySelector('#talent-match-count').textContent=`${filteredCandidates(state).length} of ${candidates(state).length} visible profiles match.`;updatePager('talent',filteredCandidates(state).length);}
   });
   main.addEventListener('change',event=>{
     const t=event.target;
-    const controls={'cohort-filter':'cohort','support-filter':'supportFilter','request-filter':'requestFilter','talent-skill':'talentSkill','talent-role':'talentRole'};
-    if(controls[t.id]){workspace.ui[controls[t.id]]=t.value;render();document.getElementById(t.id)?.focus();}
-    if(t.id==='review-only'){workspace.ui.reviewOnly=t.checked;document.querySelector('#student-results').innerHTML=studentRows(state);}
-    if(t.id==='subject-filter'){workspace.ui.subject=Number(t.value);render();document.querySelector('#subject-filter').focus();}
+    const controls={'cohort-filter':'cohort','support-filter':'supportFilter','request-filter':'requestFilter','talent-skill':'talentSkill','talent-role':'talentRole','talent-program':'talentProgram','talent-degree':'talentDegree','talent-year':'talentYear','talent-semester':'talentSemester','talent-batch':'talentBatch','talent-evidence':'talentEvidence','talent-sort':'talentSort'};
+    if(controls[t.id]){workspace.ui.talentPage=0;workspace.ui.studentPage=0;workspace.ui[controls[t.id]]=t.value;Promise.resolve(render()).then(()=>document.getElementById(t.id)?.focus());}
+    if(t.id==='review-only'){workspace.ui.studentPage=0;workspace.ui.reviewOnly=t.checked;document.querySelector('#student-results').innerHTML=studentRows(state);updatePager('students',filteredStudents(state).length);}
+    if(t.id==='subject-filter'){workspace.ui.subject=Number(t.value);Promise.resolve(render()).then(()=>document.querySelector('#subject-filter')?.focus());}
     if(t.dataset.compare){
       if(t.checked&&workspace.ui.compare.length>=3){t.checked=false;announce('Choose up to three candidates for comparison.');return;}
       workspace.ui.compare=t.checked?[...workspace.ui.compare,t.dataset.compare]:workspace.ui.compare.filter(id=>id!==t.dataset.compare);render();

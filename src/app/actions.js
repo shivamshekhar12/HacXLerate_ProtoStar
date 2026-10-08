@@ -1,3 +1,4 @@
+import {catalog,validateEducation} from '../services/catalog-service.js';
 import { icon, escapeHtml, announce, showDialog } from '../components/ui.js';
 import { state, saveGoal, saveWorkspace } from './state.js';
 import { demoRecommendation, demoRoles } from '../data/demo-student.js';
@@ -54,12 +55,13 @@ function projectDialog(render, id) {
   });
 }
 function profileDialog(render) {
-  const s = state.student;
-  formDialog('Edit profile', `${field('Display name','name',s.name,80)}${field('Program','program',s.program,120)}<div class="two-column form-grid"><div><label for="profile-year">Year</label><input type="number" id="profile-year" name="year" min="1" max="6" value="${s.year}" required/></div><div><label for="profile-semester">Semester</label><input type="number" id="profile-semester" name="semester" min="1" max="12" value="${s.semester}" required/></div></div>`, async values => {
-    const year = Number(values.year), semester = Number(values.semester);
-    if (!values.name || !values.program || !Number.isInteger(year) || year < 1 || year > 6 || !Number.isInteger(semester) || semester < 1 || semester > 12) return 'Enter your name, program, a year from 1–6, and a semester from 1–12.';
-    Object.assign(s, { name: values.name, program: values.program, year, semester });
-    await confirmSave(render, 'Demo profile updated.');
+  const s=state.student;
+  const list=(id,items)=>`<datalist id="${id}">${items.map(x=>`<option value="${escapeHtml(x)}"></option>`).join('')}</datalist>`;
+  const input=(label,name,value,max,choices)=>`<label for="education-${name}">${label}</label><input id="education-${name}" name="${name}" value="${escapeHtml(value??'')}" maxlength="${max}" ${choices?`list="${name}-choices"`:''} required/>${choices?list(name+'-choices',choices):''}`;
+  formDialog('Edit profile',`${field('Display name','name',s.name,80)}<div class="two-column form-grid"><div>${input('Degree','degree',s.degree,80,catalog.degrees)}</div><div>${input('Course / specialization','program',s.program,120,catalog.programs)}</div><div>${input('Batch name or number','batch',s.batch,40)}</div><div><label for="education-year">Year</label><select id="education-year" name="year" required><option value="">Select year</option>${Array.from({length:10},(_,i)=>`<option value="${i+1}" ${s.year===i+1?'selected':''}>Year ${i+1}</option>`).join('')}</select></div><div><label for="education-semester">Semester</label><select id="education-semester" name="semester" required><option value="">Select semester</option>${Array.from({length:20},(_,i)=>`<option value="${i+1}" ${s.semester===i+1?'selected':''}>Semester ${i+1}</option>`).join('')}</select></div></div><small>Choose a suggestion or enter your own degree, course and batch. Year and semester are selected independently to support different academic calendars.</small>`,async values=>{
+    const error=validateEducation(values);if(error)return error;
+    Object.assign(s,{name:values.name,program:values.program,degree:values.degree,batch:values.batch,year:Number(values.year),semester:Number(values.semester)});
+    await confirmSave(render,'Profile updated.');
   });
 }
 function portfolioDialog(render, key, id) {
@@ -94,6 +96,7 @@ export function bindActions(render) {
       case 'sources': showDialog('Integrated data sources', `<p>Source categories for this workspace. Missing records stay unavailable.</p><div class="source-list">${state.student.domains.map(d => `<div><span><strong>${escapeHtml(d.name)}</strong><small>${escapeHtml(d.source)}</small></span><span class="badge ${d.value === null ? 'neutral' : 'positive'}">${d.state}</span></div>`).join('')}</div>`); break;
       case 'goal': goalDialog(render); break;
       case 'toggle-goal': if (state.goal) { const persisted = await saveGoal({ ...state.goal, status: state.goal.status === 'complete' ? 'planned' : 'complete' }); render(); announce(`Goal ${state.goal.status === 'complete' ? 'completed' : 'reopened'}.${persisted ? '' : ' Saved for this session only.'}`); } break;
+      case 'custom-role': formDialog('Add your career direction',`${field('Target role','title',state.student.targetRole,100)}<p>Custom directions do not inherit requirements from another career.</p>`,async values=>{if(!values.title)return 'Enter a career direction.';state.student.targetRole=values.title;await confirmSave(render,'Career direction saved.');});break;
       case 'add-skill': skillDialog(render); break;
       case 'add-project': projectDialog(render); break;
       case 'edit-profile': profileDialog(render); break;
@@ -102,8 +105,11 @@ export function bindActions(render) {
     }
     }catch{if(snapshot){Object.assign(state,snapshot);await render();}showDialog('Save unsuccessful','<p>Your changes could not be saved to Supabase. Reload before trying again.</p>');}
   });
-  main.addEventListener('input', event => {
+  main.addEventListener('input', async event => {
     const target = event.target;
+    if(target.id==='student-subject-search'){
+      state.ui.subjectSearch=target.value;const caret=target.selectionStart;await render();const input=document.getElementById(target.id);input?.focus();input?.setSelectionRange(caret,caret);return;
+    }
     if (target.id === 'skill-search') {
       state.ui.skillSearch = target.value;
       document.querySelector('#skill-results').innerHTML = renderSkillResults(state);
@@ -119,6 +125,7 @@ export function bindActions(render) {
     const snapshot=structuredClone({student:state.student,portfolio:state.portfolio,goal:state.goal,revision:state.revision});
     try{
     const target = event.target;
+    if(['student-subject-search','student-subject-semester'].includes(target.id)){state.ui[target.id==='student-subject-search'?'subjectSearch':'subjectSemester']=target.value;await render();document.getElementById(target.id)?.focus();return;}
     if (target.id === 'skill-filter') { state.ui.skillFilter = target.value; document.querySelector('#skill-results').innerHTML = renderSkillResults(state); }
     if (target.dataset.control === 'target-role' && demoRoles.some(r => r.title === target.value)) { state.student.targetRole = target.value; await confirmSave(render, 'Target role updated.'); document.querySelector('#target-role').focus(); }
     if (target.dataset.consent) { state.portfolio.consent[target.dataset.consent] = target.checked; await confirmSave(render, 'Local sharing preview updated.'); document.querySelector(`[data-consent="${target.dataset.consent}"]`).focus(); }
