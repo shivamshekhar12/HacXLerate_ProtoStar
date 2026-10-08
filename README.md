@@ -8,6 +8,8 @@ The product name is **Porto-Star**; the deployment slug uses **protostar**. Exis
 
 ## Try it
 
+**Live application: https://protostar-campus.vercel.app**
+
 Use **Explore demo preview** on the login page. Aaman Sharma is the default synthetic student. The workspace selector opens Faculty and Recruiter previews. The dataset contains 500 synthetic students, not 500 registered users. Candidate discovery uses a separate professional projection.
 
 See [deployment notes](docs/DEPLOYMENT.md) for the published address and verification.
