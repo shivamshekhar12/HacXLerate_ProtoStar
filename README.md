@@ -136,7 +136,7 @@ Earlier checkpoint documents are historical. The four root specifications descri
 
 ## GitHub development
 
-Repository: `Rudra-Sharma-432/HacXLerate`, branch `codex`.
+Repository: `shivamshekhar12/HacXLerate_ProtoStar`.
 
 ```sh
 git status
@@ -145,7 +145,7 @@ git commit -m "Describe the change"
 git push origin codex
 ```
 
-Commit your changes before `git pull --rebase origin codex`. Keep credentials, `.env.local`, dependencies, and caches out of Git. A Git push does not automatically deploy Vercel until a Git integration and production branch are configured.
+Commit your changes before `git pull --rebase origin main`. Keep credentials, `.env.local`, dependencies, and caches out of Git. A Git push does not automatically deploy Vercel until a Git integration and production branch are configured.
 
 ## Prototype limits
 
