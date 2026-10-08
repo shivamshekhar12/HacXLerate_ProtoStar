@@ -1,6 +1,6 @@
 import {analyzeStudent} from './analytics.js';
 import { cohort, professionalCandidates, initialRecruiterRole } from '../data/demo-campus.js';
-export const workspace = { notes:[], shortlist:[], requests:[], role:structuredClone(initialRecruiterRole), ui:{ cohort:'all', studentSearch:'', reviewOnly:false, talentSearch:'', talentSkill:'all', talentRole:'all',talentProgram:'all',talentDegree:'all',talentYear:'all',talentSemester:'all',talentBatch:'all',talentEvidence:'all',talentSort:'name',talentPage:0,studentPage:0, compare:[], requestFilter:'all', supportFilter:'all', subject:0 } };
+export const workspace = { notes:[], shortlist:[], requests:[], role:structuredClone(initialRecruiterRole), ui:{ cohort:'all', studentSearch:'', reviewOnly:false, talentSearch:'', talentSkill:[], talentRole:'all',talentProgram:'all',talentDegree:'all',talentYear:[],talentSemester:[],talentBatch:'all',talentEvidence:'all',talentSort:'name',talentPage:0,studentPage:0, compare:[], requestFilter:'all', supportFilter:'all', subject:0,subjectSort:'desc' } };
 const storageKey='smart-campus:role-demos:v1';
 export function persistRoleWorkspace() {
   try { localStorage.setItem(storageKey,JSON.stringify({notes:workspace.notes,shortlist:workspace.shortlist,requests:workspace.requests,role:workspace.role})); return true; } catch { return false; }
@@ -31,13 +31,14 @@ export function candidates(state) {
 }
 export function filterCandidateRecords(items,filters,role={required:[]}) {
  const q=(filters.talentSearch??'').toLowerCase().trim();
- const equal=(key,value)=>!filters[key]||filters[key]==='all'||String(value??'')===String(filters[key]);
+ const selected=value=>Array.isArray(value)?value:(value&&value!=='all'?[value]:[]);
+ const equal=(key,value)=>!selected(filters[key]).length||selected(filters[key]).some(v=>String(value??'')===String(v));
  // Only professional, consent-selected fields enter search, filters and sorting.
- const rows=items.filter(c=>equal('talentRole',c.targetRole)&&(!filters.talentSkill||filters.talentSkill==='all'||c.skills.some(s=>s.toLowerCase()===filters.talentSkill.toLowerCase()))&&equal('talentProgram',c.program)&&equal('talentDegree',c.degree)&&equal('talentYear',c.year)&&equal('talentSemester',c.semester)&&equal('talentBatch',c.batch)&&(!filters.talentEvidence||filters.talentEvidence==='all'||(filters.talentEvidence==='projects'?c.projects.length>0:c.projects.length===0))&&`${c.name} ${c.skills.join(' ')} ${c.program} ${c.targetRole}`.toLowerCase().includes(q));
+ const rows=items.filter(c=>equal('talentRole',c.targetRole)&&selected(filters.talentSkill).every(skill=>c.skills.some(s=>s.toLowerCase()===String(skill).toLowerCase()))&&equal('talentProgram',c.program)&&equal('talentDegree',c.degree)&&equal('talentYear',c.year)&&equal('talentSemester',c.semester)&&equal('talentBatch',c.batch)&&(!filters.talentEvidence||filters.talentEvidence==='all'||(filters.talentEvidence==='projects'?c.projects.length>0:c.projects.length===0))&&`${c.name} ${c.skills.join(' ')} ${c.program} ${c.targetRole}`.toLowerCase().includes(q));
  return rows.sort((a,b)=>filters.talentSort==='projects'?b.projects.length-a.projects.length||a.name.localeCompare(b.name):filters.talentSort==='skills'?matchRequirements(b,role).filter(r=>r.matched).length-matchRequirements(a,role).filter(r=>r.matched).length||a.name.localeCompare(b.name):a.name.localeCompare(b.name));
 }
 export function filteredCandidates(state){return filterCandidateRecords(candidates(state),workspace.ui,workspace.role);}
-export function resetTalentFilters(){Object.assign(workspace.ui,{talentPage:0,talentSearch:'',talentRole:'all',talentSkill:'all',talentProgram:'all',talentDegree:'all',talentYear:'all',talentSemester:'all',talentBatch:'all',talentEvidence:'all',talentSort:'name'});}
+export function resetTalentFilters(){Object.assign(workspace.ui,{talentPage:0,talentSearch:'',talentRole:'all',talentSkill:[],talentProgram:'all',talentDegree:'all',talentYear:[],talentSemester:[],talentBatch:'all',talentEvidence:'all',talentSort:'name'});}
 export function matchRequirements(candidate, role=workspace.role) {
   const lookup=new Set(candidate.skills.map(s=>s.toLowerCase()));
   return role.required.map(skill=>({skill,matched:lookup.has(skill.toLowerCase())}));
@@ -45,4 +46,9 @@ export function matchRequirements(candidate, role=workspace.role) {
 export function toggleShortlist(id) {
   if(workspace.shortlist.includes(id)) workspace.ui.compare=workspace.ui.compare.filter(x=>x!==id);
   workspace.shortlist=workspace.shortlist.includes(id)?workspace.shortlist.filter(x=>x!==id):[...workspace.shortlist,id];
+}
+
+export function sortSubjectRows(rows,name,index,direction='desc') {
+ const mark=s=>s.subjectMarks?.[name]??s.subjects?.[index];
+ return [...rows].sort((a,b)=>{const x=mark(a),y=mark(b);if(typeof x!=='number')return typeof y==='number'?1:a.name.localeCompare(b.name);if(typeof y!=='number')return -1;return (direction==='asc'?x-y:y-x)||a.name.localeCompare(b.name);});
 }

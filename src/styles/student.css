@@ -213,3 +213,19 @@ form input { margin-bottom:3px; }
 @media(max-width:900px) { .analytics-top { grid-template-columns:1fr; } .interpretation-panel .section-heading { flex-wrap:wrap; } }
 .faculty-cohort-filter { display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-bottom:20px;padding:16px 24px; }
 .faculty-cohort-filter .filter-bar,.faculty-cohort-filter p { margin:0; }
+/* Connected scenario: equal-width, equally stretched desktop panels. */
+.simulator-grid {grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:stretch;}
+.simulator-grid>.panel {min-width:0;margin-bottom:0;}
+.simulator-controls .slider-field {margin:16px 0;}
+.simulator-controls .slider-field small {display:block;font-size:11px;color:var(--muted);}
+.scenario-score {background:var(--soft);border-radius:12px;padding:20px;margin:18px 0;}
+.scenario-score>span {font-size:10px;letter-spacing:1px;color:var(--muted);}
+.scenario-score>strong {display:block;font-size:40px;color:var(--primary);margin-top:8px;}
+.scenario-score strong small {font-size:15px;}
+.scenario-score p {margin-bottom:0;}
+.scenario-table th,.scenario-table td {padding:13px 10px;font-size:12px;}
+.scenario-table small {color:var(--muted);}
+.scenario-explanation {font-size:12px;line-height:1.7;margin-top:20px;}
+.scenario-method summary {cursor:pointer;font-weight:700;}
+.scenario-method p {margin-top:12px;}
+@media(max-width:900px){.simulator-grid {grid-template-columns:1fr;}}

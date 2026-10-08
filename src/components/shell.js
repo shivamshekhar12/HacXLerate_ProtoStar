@@ -18,10 +18,10 @@ export function renderShell() {
       <a class="brand" href="#/overview"><span class="brand-icon">${icon('school')}</span><span>Porto-Star<small>SUCCESS PORTAL</small></span></a>
       <p class="nav-label">STUDENT WORKSPACE</p>
       <nav></nav>
-      <div class="sidebar-bottom"><div class="role-tag">${icon('science')}Frontend preview</div><p>Student · Faculty · Recruiter<br>Switch workspaces in the header.</p><small>Round 1 · Frontend first</small></div>
+      <div class="sidebar-bottom"><p>Student · Faculty · Recruiter<br>Switch workspaces in the header.</p><small>Round 1 · Frontend first</small></div>
     </aside>
     <div class="workspace"><header class="topbar"><button class="icon-button menu-button" aria-label="Toggle navigation" aria-expanded="false" id="menu">${icon('menu')}</button><span class="hub-label">Student Success Hub</span><label class="sr-only" for="workspace-role">Workspace preview</label><select id="workspace-role"><option value="student">Student</option><option value="faculty">Faculty</option><option value="recruiter">Recruiter</option></select><span class="topbar-context"><span id="account-name"></span> <span id="account-program"></span></span><button class="auth-exit" id="auth-exit" type="button">Exit preview</button><a class="avatar" href="#/profile" aria-label="Open my profile" id="account-avatar">AS</a></header>
-    <main id="main" tabindex="-1"></main><footer>Porto-Star <span>Frontend preview · Sample records · No outcome guarantees</span></footer></div>`;
+    <main id="main" tabindex="-1"></main><footer>Porto-Star <span>Sample records · No outcome guarantees</span></footer></div>`;
   const sidebar = document.querySelector('.sidebar');
   const mobile = matchMedia('(max-width: 680px)');
   const updateNavigation = () => { sidebar.inert = mobile.matches && !sidebar.classList.contains('is-open'); };

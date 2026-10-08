@@ -25,7 +25,7 @@ Porto-Star combines source-aware dashboards, deterministic calculations, readabl
 | Area | Working now | Remaining work |
 | --- | --- | --- |
 | Accounts | Supabase login/signup, canonical role checks, empty new student workspace | Production email setup, recovery, complete staff provisioning |
-| Student | Own profile/portfolio/goal persistence, overview, subjects, skills/roles, growth, basic what-if preview | Verified evidence uploads, student doubts, profile photos, improved effort model |
+| Student | Own profile/portfolio/goal persistence, overview, subjects, skills/roles, growth, linked effort simulator | Verified evidence uploads, student doubts, profile photos, institutional simulator validation |
 | Faculty | 500-record synthetic cohort, review queue/reasons, subject filters, local support workflow, class PDF | Authorized live cohort queries and persistent support workflow |
 | Recruiter | Synthetic discovery, education/skill filters, roles, comparison, local shortlists, unsent drafts | Live consent projections and mediated contact requests |
 | Analytics | Explainable demo score, combined review index, segmentation, missing-data rules | Institutional policy, source ingestion and outcome validation |
@@ -126,7 +126,8 @@ output/pdf/           Reviewed report and presentation PDFs
 - [Project summary](docs/presentation/PROJECT_SUMMARY.md): problems, motivation, scope, stack and reasons.
 - [Solution description](docs/presentation/SOLUTION_DESCRIPTION.md): architecture, workflows, methods and example.
 - [Other information](docs/presentation/OTHER_INFORMATION.md): remaining problems, proposed solutions and rollout.
-- [Latest analytics checkpoint](docs/ANALYTICS_MODULE_02.md): implementation evidence and verification limits.
+- [Report, simulator and filter improvements](docs/IMPROVEMENT_MODULE_03.md).
+- [Analytics checkpoint](docs/ANALYTICS_MODULE_02.md): implementation evidence and verification limits.
 - [Student backend](docs/STUDENT_BACKEND.md), [Auth](docs/LOGIN_AUTH.md), [Supabase](docs/SUPABASE_INTEGRATION.md).
 
 Earlier checkpoint documents are historical. The four root specifications describe product intent and operating constraints. The original brief and visual references are under `docs/reference/`.
@@ -146,6 +147,6 @@ Commit your changes before `git pull --rebase origin codex`. Keep credentials, `
 
 ## Prototype limits
 
-The current simulator is illustrative, without proven causal effort/CGPA relationships. The faculty history graph remains an explicitly labelled original five-student sample, not the history of all 500 records. Provider invocation, public rejection, local fallback, and database permissions were tested separately; actual signed-in narration still requires a real-account test. Reports were generated and visually reviewed; browser download capture was not confirmed at the preceding checkpoint.
+The current six-control simulator links effort to CGPA, attendance, assignments, coding and the final index. Its coefficients, diminishing returns and workload penalty are explicit illustrative assumptions, without proven causal effort/CGPA relationships. The faculty history graph remains an explicitly labelled original five-student sample, not the history of all 500 records. Provider invocation, public rejection, local fallback, and database permissions were tested separately; actual signed-in narration still requires a real-account test. Reports were generated and visually reviewed; browser download capture was not confirmed at the preceding checkpoint.
 
 No open-source license has been chosen. Add one after repository owners agree on reuse terms.

@@ -116,8 +116,8 @@ export function bindActions(render) {
     }
     if (target.dataset.scenario) {
       state.ui.scenario[target.dataset.scenario] = Number(target.value);
-      const units = { attendance: '%', placement: '/ 100', lms: 'of 6' };
-      document.querySelector(`#value-${target.dataset.scenario}`).textContent = `${target.value} ${units[target.dataset.scenario]}`;
+      const units = Object.fromEntries(['study','attendance','lms','coding','projects','achievements'].map(id=>[id,'%']));
+      document.querySelector(`#value-${target.dataset.scenario}`).textContent = `${Number(target.value)>0?'+':''}${target.value}${units[target.dataset.scenario]}`;
       document.querySelector('#scenario-results').innerHTML = renderScenarioResults(state);
     }
   });

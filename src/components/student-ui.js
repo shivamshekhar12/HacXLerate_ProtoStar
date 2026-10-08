@@ -1,7 +1,7 @@
 import { escapeHtml, icon } from './ui.js';
 export function demoBanner(state) {
   if(state?.mode==='live')return `<div class="demo-banner">${icon('cloud_done')}<span><strong>Your Supabase account</strong> · Self-reported portfolio. Institutional records appear only when supplied.</span></div>`;
-  return `<div class="demo-banner">${icon('science')}<span><strong>Frontend preview</strong> · Sample data. Edits stay in this browser.</span><button class="text-button" data-action="sources">View data sources ${icon('arrow_forward')}</button></div>`;
+  return `<div class="demo-banner">${icon('science')}<span><strong>Demo workspace</strong> · Sample data. Edits stay in this browser.</span><button class="text-button" data-action="sources">View data sources ${icon('arrow_forward')}</button></div>`;
 }
 export function pageHeading(eyebrow, title, description, action = '') {
   return `<div class="page-heading"><div><p class="eyebrow">${escapeHtml(eyebrow)}</p><h1>${escapeHtml(title)}</h1><p>${escapeHtml(description)}</p></div>${action}</div>`;
