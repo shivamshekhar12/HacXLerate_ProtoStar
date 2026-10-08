@@ -4,7 +4,7 @@ Deployed on 8 October 2026 with the Vercel plugin from the current local source 
 
 - Public production URL: https://protostar-campus.vercel.app
 - Vercel project: `protostar-campus` (`prj_pqu3AnBZLx9notrmyCAsxEHgv5Jp`).
-- Latest deployment: `dpl_ENaHA8yfMKzqUNBBJrovkHAUECqk`, reported `READY`.
+- Latest deployment: `dpl_3qgiLGhy8UEa8PkuqdvXHNNe2iYj`, reported `READY`.
 - Framework: Vite. Node 22.x. Install `npm ci`; build `npm run build`; output `dist`.
 - Build duration reported by deployment timestamps: approximately 7 seconds.
 - This was a direct source upload, not a Git-triggered build. Git auto-deployment is not configured.
@@ -29,7 +29,7 @@ Saved settings evidence: `docs/review/auth-production-redirect.png`. No wildcard
 
 ## Verification and monitoring
 
-Local checks: 49 tests passed, production build passed, and Git whitespace validation passed. Presentation PDFs were generated and visually reviewed. Hosted login and synthetic role previews were checked in the browser; detailed observations are recorded below after verification.
+Local checks: 51 tests passed, production build passed, and Git whitespace validation passed. Presentation PDFs were generated and visually reviewed. Hosted login and synthetic role previews were checked in the browser; detailed observations are recorded below after verification.
 
 Vercel reported the production deployment and stable alias ready. Build-log retrieval returned a connector-scope 403; no authenticated CLI was installed to provide that fallback. No log drains are configured. Browser checks do not establish production observability or complete private staff backends. Faculty/recruiter remain synthetic previews, with live access integration still pending.
 
@@ -50,3 +50,5 @@ Keep `.env.local` and `.vercel/` out of Git. Never add Gemini or service-role ke
 Latest release also includes the report redesign, six-control coupled simulator, recruiter multi-select and faculty subject sorting documented in `IMPROVEMENT_MODULE_03.md`.
 
 Latest audit release corrects missing-data handling, faculty curriculum/coverage, analytics policy validation, English fallbacks and empty-account reports. See [audit evidence and limits](AUDIT_2026_10_08.md). Supabase `describe-progress` was separately redeployed with the shared analytics corrections.
+
+Email delivery checkpoint: confirmation-email quota errors now have accurate copy. Custom SMTP is still disabled and requires a provider; see [delivery evidence and required setup](AUTH_EMAIL_DELIVERY.md).

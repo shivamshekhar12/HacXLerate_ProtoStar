@@ -1,6 +1,7 @@
 export const roles = ['student', 'faculty', 'recruiter'];
 export const roleHome = role => ({student:'overview',faculty:'faculty',recruiter:'recruiter',management:'management'}[role]);
 export function authErrorMessage(error) {
+  if (error?.code === 'over_email_send_rate_limit') return 'Confirmation email could not be sent because the project has reached its email limit. Please try later or contact the project team. If you already confirmed your account, use Sign in.';
   if (error?.code === 'email_not_confirmed') return 'Confirm your email address before signing in.';
   if (error?.status === 429 || error?.code === 'over_request_rate_limit') return 'Too many attempts. Wait a moment and try again.';
   if (error?.name === 'AuthRetryableFetchError' || error?.status >= 500) return 'We couldn’t reach the sign-in service. Try again shortly.';
@@ -46,6 +47,7 @@ export async function signUpAccount(client,{email,password,name,role}) {
   if(!roles.includes(role)||!name.trim()||name.trim().length>80||password.length<8)return {error:'Check your name, role, and password (at least 8 characters).'};
   const {data,error}=await client.auth.signUp({email:email.trim(),password,options:{data:{display_name:name.trim(),requested_role:role},emailRedirectTo:window.location.origin+window.location.pathname}});
   if(error){
+    if(error.code==='over_email_send_rate_limit')return {error:authErrorMessage(error)};
     if(error.code==='email_address_not_authorized')return {error:'Email delivery is restricted in this Supabase project. Ask the project owner to configure SMTP.'};
     if(error.code==='weak_password')return {error:'Choose a stronger password, following the project password requirements.'};
     return {error:error.status===429||error.status>=500?authErrorMessage(error):'We couldn’t create the account. Check your details and try again.'};

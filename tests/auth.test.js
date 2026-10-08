@@ -55,3 +55,15 @@ test('production signup requests the exact HTTPS confirmation destination withou
   assert.doesNotMatch(request.options.emailRedirectTo,/localhost|#\/signup/);
  }finally{if(previous===undefined)delete globalThis.window;else globalThis.window=previous;}
 });
+
+test('confirmation-email quota errors are distinguished from sign-in attempt throttling',async()=>{
+ const emailError={status:429,code:'over_email_send_rate_limit'};
+ assert.match(authErrorMessage(emailError),/project has reached its email limit/);
+ assert.doesNotMatch(authErrorMessage(emailError),/Too many attempts/);
+ assert.match(authErrorMessage({status:429,code:'over_request_rate_limit'}),/Too many attempts/);
+ const previous=globalThis.window;globalThis.window={location:{origin:'https://protostar-campus.vercel.app',pathname:'/'}};
+ try{
+  const result=await signUpAccount({auth:{signUp:async()=>({data:null,error:emailError})}},{email:'student@example.test',password:'test-password',name:'Student',role:'student'});
+  assert.match(result.error,/project has reached its email limit/);assert.equal(result.confirmation,undefined);
+ }finally{if(previous===undefined)delete globalThis.window;else globalThis.window=previous;}
+});
