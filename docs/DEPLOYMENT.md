@@ -4,7 +4,7 @@ Deployed on 8 October 2026 with the Vercel plugin from the current local source 
 
 - Public production URL: https://protostar-campus.vercel.app
 - Vercel project: `protostar-campus` (`prj_pqu3AnBZLx9notrmyCAsxEHgv5Jp`).
-- Latest deployment: `dpl_3qgiLGhy8UEa8PkuqdvXHNNe2iYj`, reported `READY`.
+- Latest deployment: `dpl_HnfUzvb7JGytJ8RCLERxM33wueme`, reported `READY`.
 - Framework: Vite. Node 22.x. Install `npm ci`; build `npm run build`; output `dist`.
 - Build duration reported by deployment timestamps: approximately 7 seconds.
 - This was a direct source upload, not a Git-triggered build. Git auto-deployment is not configured.
@@ -52,3 +52,5 @@ Latest release also includes the report redesign, six-control coupled simulator,
 Latest audit release corrects missing-data handling, faculty curriculum/coverage, analytics policy validation, English fallbacks and empty-account reports. See [audit evidence and limits](AUDIT_2026_10_08.md). Supabase `describe-progress` was separately redeployed with the shared analytics corrections.
 
 Email delivery checkpoint: confirmation-email quota errors now have accurate copy. Custom SMTP is still disabled and requires a provider; see [delivery evidence and required setup](AUTH_EMAIL_DELIVERY.md).
+
+Google security checkpoint: homepage ownership is verified through its HTML meta tag, and an owner review was submitted after clarifying the prototype identity and account-password wording. Google's deceptive-page warning has not yet been cleared. See [findings and review evidence](GOOGLE_SAFE_BROWSING.md).
