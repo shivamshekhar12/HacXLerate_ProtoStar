@@ -23,7 +23,7 @@ The deployment is public and the synthetic preview works without an account. Exi
 
 Both values persisted after dashboard reload. The frontend already requests this exact production root from the deployed origin; no runtime-code change or Vercel redeployment was required. A production signup regression test asserts the requested destination excludes localhost and the SPA routing hash. All 50 tests passed.
 
-A deliberately invalid confirmation token produced HTTP 303 with a Location on the production domain and the expected `otp_expired` error. This verifies the live redirect destination without creating/changing an account; it is not a successful real-user email-confirmation test. Previously issued emails can contain their original redirect target: request a fresh confirmation email if an old link still points to localhost. Production SMTP/email delivery remains a separate configuration concern.
+A deliberately invalid confirmation token produced HTTP 303 with a Location on the production domain and the expected `otp_expired` error. A second invalid-token check requesting the old localhost destination also fell back to production. These checks verify the live redirect destination without creating/changing an account; it is not a successful real-user email-confirmation test. Previously issued emails can contain their original redirect target: request a fresh confirmation email if an old link still points to localhost. Production SMTP/email delivery remains a separate configuration concern.
 
 Saved settings evidence: `docs/review/auth-production-redirect.png`. No wildcard redirect, account permission, password policy or email-confirmation requirement was added or weakened.
 
